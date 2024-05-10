@@ -13,7 +13,8 @@
 export default {
     name: 'PostView',
     props: {
-        id: Number
+        id: Number,
+        
     },
     // data() {
     //     return {
