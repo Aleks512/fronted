@@ -12,7 +12,7 @@
                 <img class="card-img-top" src="https://via.placeholder.com/150x100" alt="Card image cap" />
                 <div class="card-body">
                   <h4>
-                    <a class="text-secondary" href="">{{ post.title }}</a>
+                    <router-link :to="{ name: 'post', params: { id: post.id } }" class="text-secondary">{{ post.title }}</router-link>
                   </h4>
                   <p class="card-text">{{ post.content }}</p>
                   <div class="d-flex justify-content-between align-items-center">
