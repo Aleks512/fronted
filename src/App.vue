@@ -12,6 +12,12 @@
         <li class="nav-item">
           <router-link :to="{ name: 'posts' }" class="nav-link">Posts</router-link>
         </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'login' }" class="nav-link">Login</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'logout' }" class="nav-link">Logout</router-link>
+        </li>
       </ul>
     </div>
   </nav>

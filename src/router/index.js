@@ -3,7 +3,9 @@ import HomeView from '../views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import PostsView from '@/views/posts/PostsView.vue'
 import PostView from '@/views/posts/PostView.vue'
-
+import LoginView from '@/views/LoginView.vue'
+import LogoutView from '@/views/LogoutView.vue'
+import { store } from '../store'; //
 const routes = [
   {
     path: '/',
@@ -19,7 +21,14 @@ const routes = [
   {
     path: '/posts',
     name: 'posts',
-    component: PostsView
+    component: PostsView,
+    beforeEnter: (to, from, next) => {
+      if (store.getters['auth/isLoggedIn']) {
+        next();
+      } else {
+        next({ name: 'login' }); // Redirigez vers la page de connexion si non connecté
+      }
+    }
   },
   {
     path: '/post/:id',
@@ -27,6 +36,17 @@ const routes = [
     component: PostView,
     props: true
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView,
+  },
+  {
+    path: '/logout',
+    name: 'logout',
+    component: LogoutView,
+  },
+
 
   // Redirect
   {
