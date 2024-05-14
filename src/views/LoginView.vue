@@ -13,23 +13,25 @@ export default {
     return {
       email: '',
       password: '',
-      // incorrectAuth is now reactive based on Vuex state
     };
   },
   computed: {
+    // Accès à un getter
     incorrectAuth() {
-      return this.$store.getters['auth/isAuthError'];
+      return this.$store.getters['auth/authError'];
     }
   },
   methods: {
     login() {
+      // Dispatch d'une action
       this.$store.dispatch('auth/login', {
         email: this.email,
         password: this.password
       }).then(() => {
-        this.$router.push({ name: 'posts' });
+        this.$router.push({ name: 'dashboard' }); // Assurez-vous que le nom de la route est correct.
         alert('Login successful!');
       }).catch(error => {
+        console.error("Login failed:", error);
         alert('Failed to login: ' + error.message);
       });
     }

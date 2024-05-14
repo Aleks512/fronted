@@ -90,6 +90,7 @@ export default {
         .then((response) => {
           console.log("API fetched data successfully", response.data);
           this.APIData = response.data;
+          console.log("API data assigned to APIData:", this.APIData);
         })
         .catch((err) => {
           console.error("Error fetching posts:", err);

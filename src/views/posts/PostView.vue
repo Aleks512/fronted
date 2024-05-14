@@ -15,6 +15,7 @@ export default {
     props: {
         id: Number,
         
+        
     },
     // data() {
     //     return {
