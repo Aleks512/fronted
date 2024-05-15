@@ -1,40 +1,22 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <router-link :to="{ name: 'home' }" class="navbar-brand">Home</router-link>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <router-link :to="{ name: 'about' }" class="nav-link">About</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'PublicRecipesList' }" class="nav-link">Posts</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'posts' }" class="nav-link">Posts</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'login' }" class="nav-link">Login</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'logout' }" class="nav-link">Logout</router-link>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <button @click="redirect">Redirect</button>
+  <NavBar />
+ 
+  <!-- <button @click="redirect">Redirect</button>
   <button @click="back">Back</button>
-  <button @click="forward">Forward</button>
+  <button @click="forward">Forward</button> -->
 
   <router-view/>
 </template>
 
 <script>
+import NavBar from '@/components/NavbarView.vue'
+
+
 export default {
   name: 'App',
+  components: {
+    NavBar
+  },
   methods: {
     redirect() {
       this.$router.push({ name: 'home' });
