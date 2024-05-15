@@ -13,8 +13,8 @@
         <ul>
           <li v-for="(ingredient, index) in recipe.ingredients.split(',')" :key="index">{{ ingredient }}</li>
         </ul>
-        <h2>Procédure</h2>
-        <div>{{ recipe.procedure }}</div>
+        <h2>Author</h2>
+        <div>{{ recipe.author }}</div>
       </div>
     </div>
   </div>

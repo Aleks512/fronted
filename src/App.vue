@@ -6,6 +6,7 @@
   <button @click="forward">Forward</button> -->
 
   <router-view/>
+  <div class="oval"></div>
 </template>
 
 <script>
@@ -33,26 +34,43 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #041423;
+  
 }
 
-nav {
-  padding: 30px;
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Bad+Script&family=Open+Sans:wght@400;700&display=swap');
+
+body {
+
+    background-color:#EDFFCC !important;
+    color: #2c3e50;
+}
+
+/* Add styles using the fonts */
+h1, h2, h3 {
+    font-family: 'Lobster', cursive;
+    font: 2em !important;
+}
+
+p {
+    font-size: 1rem !important;
 }
 
 nav a {
   font-weight: bold;
   color: #2c3e50;
   text-decoration: none;
+  line-height: 1.5rem;
+  font-size-adjust: inherit;
+
 }
 
 nav a.router-link-exact-active {
-  color: #020e09;
-  background-color: chartreuse;
+  color: #E60020 !important;
+  text-decoration: underline red;
 }
 
 button {

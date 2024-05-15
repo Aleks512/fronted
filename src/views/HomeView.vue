@@ -1,68 +1,73 @@
 <template>
-<div class="curtain">
-  <div class="invert">
-    <h2>Curtain Effect</h2>
+  <div class="container mt-5">
+  <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="@/assets/vegetarian_chili.webp" class="d-block w-100" alt="First slide">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>First slide label</h5>
+          <p>Some representative placeholder content for the first slide.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="@/assets/few_rivolis.webp" class="d-block w-100" alt="Second slide">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Second slide label</h5>
+          <p>Some representative placeholder content for the second slide.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="@/assets/salad-cezar2.webp" class="d-block w-100" alt="Third slide">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Third slide label</h5>
+          <p>Some representative placeholder content for the third slide.</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
 </div>
-</template>
+<br>
+<br>
+
+<ArticleView />
+<br>
+
+    <TeamView />
+<br>
+
+  </template>
+  
+  
 
 <script>
+import TeamView from '@/components/TeamView.vue';
+import ArticleView from '@/components/ArticleView.vue';
+
 // @ is an alias to /src
 
 
 export default {
   name: 'HomeView',
   components: {
-
+    ArticleView,
+    TeamView,
   }
 }
 </script>
 
 <style>
-:root {
-  --minh: 98vh;
-  --color1: wheat;
-  --color2:  #6FA401  ;
-}
 
-html {
-  font-size: 60px;
-}
-
-
-.curtain {
-  /** create the "split" background **/
-  background-image: linear-gradient(to bottom, var(--color2) 50%, var(--color1) 50%);
-}
-
-/** add extra space to the bottom (need this for the "sticky" effect) **/
-.curtain::after {
-  content: "";
-  display: block;
-  min-height: var(--minh);
-}
-
-
-
-.invert {
-  /** make the content sticky **/
-  position: sticky;
-  top: 20px;
-
-  /** blend the content with the contrast effect **/
-  mix-blend-mode: difference;
-
-  /** center the content **/
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  /** set the minimum height of the section **/
-  min-height: var(--minh);
-}
-
-h2 {
-  /** set the color of the text **/
-  color: var(--color1);
-}
 </style>
