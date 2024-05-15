@@ -1,6 +1,6 @@
 <template>
-    <div class="container mt-5" style="height: 70vh;">
-        <h1>Our passionate authors </h1>
+    <div class="container m-auto" style="height: 70vh;">
+        <h1>Our passionate authors</h1>
         <div class="team-view d-flex justify-content-between">
             <div v-for="person in team" :key="person.id" class="person-card card" style="width: 300px; margin: 10px;">
             <img :src="require(`@/assets/team/${person.photo}`)" alt="Person Photo" class="person-photo card-img-top mx-auto d-block" style="width: 200px; height: 200px;">
@@ -73,18 +73,17 @@ h3{
 
 };
 
-card{
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    align-items: center;
-    justify-content: center;
-};
+
 .person-photo {
     width: 150px;
     height: 150px;
     object-fit: cover;
     border-radius: 50%;
 };
+
+.person-card, .card{
+    min-height: 400px !important;
+}
 
 
 </style>
