@@ -6,14 +6,25 @@ const getAPI = axios.create({
   timeout: 5000
 });
 
-getAPI.interceptors.request.use(function (config) {
-  const token = store.state.auth.accessToken;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+// In this setup, the axios interceptor checks sessionStorage directly to retrieve the accessToken. 
+//This method is effective in ensuring that even after page refreshes, 
+// the latest token is always used since sessionStorage is immediately updated when tokens are set or refreshed.
+getAPI.interceptors.response.use(
+  response => response,
+  async error => {
+      const originalRequest = error.config;
+      if (error.response.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          try {
+              await store.dispatch('auth/refreshToken');
+              return getAPI(originalRequest);
+          } catch (refreshError) {
+              return Promise.reject(refreshError);
+          }
+      }
+      return Promise.reject(error);
   }
-  return config;
-}, function (error) {
-  return Promise.reject(error);
-});
+);
+
 
 export default getAPI;

@@ -1,11 +1,14 @@
 import { createStore } from "vuex";
 import getAPI from "./axios-api";
+import jwt_decode from 'jwt-decode';
 
+
+// Define the auth module
 const auth = {
   namespaced: true,
   state: {
-    accessToken: null,
-    refreshToken: null,
+    accessToken: sessionStorage.getItem('accessToken') || null,
+    refreshToken: sessionStorage.getItem('refreshToken') || null,
     authError: null, // Use null to indicate no error initially
   },
   getters: {
@@ -14,13 +17,23 @@ const auth = {
   },
   mutations: {
     SET_TOKENS(state, { accessToken, refreshToken }) {
+      const decoded = jwt_decode(accessToken);
+      const expiresAt = decoded.exp * 1000; // Convert to milliseconds
+  
+      sessionStorage.setItem('accessToken', accessToken);
+      sessionStorage.setItem('refreshToken', refreshToken);
+      sessionStorage.setItem('expiresAt', expiresAt);
+  
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
-      state.authError = null; // Reset auth error on successful token reception
+      state.expiresAt = expiresAt;
+      state.authError = null; // Reset auth error
     },
     CLEAR_TOKENS(state) {
       state.accessToken = null;
       state.refreshToken = null;
+      sessionStorage.removeItem('accessToken');
+      sessionStorage.removeItem('refreshToken');
       delete getAPI.defaults.headers.common["Authorization"]; // Remove the auth header
     },
     SET_AUTH_ERROR(state, error) {
@@ -77,13 +90,31 @@ const auth = {
         })
         .catch((error) => {
           console.error("Error updating user status:", error);
-          // Gérer les erreurs, par exemple en retournant une promesse rejetée ou en utilisant un autre commit pour un état d'erreur
+          // Handle errors, for example by returning a rejected promise or using another commit for an error state
           throw error;
         });
     },
-  },
+    async refreshToken({ commit, state }) {
+      if (!state.refreshToken) {
+        throw new Error("No refresh token available.");
+      }
+      try {
+        const response = await getAPI.post('/api-token-refresh/', { refresh: state.refreshToken });
+        commit("SET_TOKENS", {
+          accessToken: response.data.access,
+          refreshToken: response.data.refresh, // Assume the server sends a new refresh token
+        });
+        return response.data.access;
+      } catch (error) {
+        console.error("Token refresh failed:", error);
+        commit("CLEAR_TOKENS");
+        throw error;
+      }
+    },
+  }
 };
 
+// Create the Vuex store
 export const store = createStore({
   modules: {
     auth: auth,
