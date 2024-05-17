@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import AboutView from "@/views/AboutView.vue";
 import PublicRecipesList from "@/views/PublicRecipesList.vue";
@@ -7,12 +7,13 @@ import PostsView from "@/views/posts/PostsView.vue";
 import PostView from "@/views/posts/PostView.vue";
 import LoginView from "@/views/LoginView.vue";
 import LogoutView from "@/views/LogoutView.vue";
-import { store } from "../store"; //
+import { store } from "../store"; // Assurez-vous que le chemin est correct
 import DashboardView from "@/views/DashboardView.vue";
 import RegisterView from "@/views/RegisterView.vue"; 
 import AddReceite from "@/views/private/AddReceite.vue";
 import DeleteReceipe from "@/views/private/DeleteReceipe.vue";
 import EditReceipe from "@/views/private/EditReceipe.vue";
+
 const routes = [
   {
     path: "/",
@@ -25,7 +26,7 @@ const routes = [
     component: AboutView,
   },
   {
-    path: '/recipes-list/',
+    path: '/recipes-list',
     name: 'PublicRecipesList',
     component: PublicRecipesList,
     props: true
@@ -76,7 +77,6 @@ const routes = [
     name: "dashboard",
     component: DashboardView,
     beforeEnter: (to, from, next) => {
-      // Vérifie si l'utilisateur est connecté
       if (!store.getters["auth/isLoggedIn"]) {
         next({ name: "login" }); // Redirige vers la page de connexion si non connecté
       } else {
@@ -87,7 +87,7 @@ const routes = [
   {
     path: "/register",
     name: "register",
-    component: RegisterView, // Ajoutez la nouvelle route pour l'inscription
+    component: RegisterView,
   },
   {
     path: "/login",
@@ -99,8 +99,6 @@ const routes = [
     name: "logout",
     component: LogoutView,
   },
-
-  // Redirect
   {
     path: "/about-us",
     redirect: { name: "about" },
@@ -109,7 +107,6 @@ const routes = [
     path: "/all-posts",
     redirect: { name: "posts" },
   },
-  // Catch All 404
   {
     path: "/:catchAll(.*)",
     component: () => import("@/views/NotFoundView.vue"),
@@ -117,7 +114,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 

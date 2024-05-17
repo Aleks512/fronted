@@ -1,7 +1,7 @@
 <template>
   <div class="register-container container mt-5">
     <h1 class="mb-4">Inscription</h1>
-    <form @submit.prevent="register">
+    <form @submit.prevent="submitRegister">
       <div class="mb-3">
         <label for="name" class="form-label">Nom :</label>
         <input id="name" type="text" class="form-control" v-model="form.name" required>
@@ -22,71 +22,69 @@
         <button type="submit" class="btn btn-primary">S'inscrire</button>
       </div>
     </form>
+    <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
   </div>
 </template>
 
-  
-  <script>
-  import { useRouter } from 'vue-router';
-  import getAPI from '@/axios-api';
-  
-  export default {
-    name: 'RegisterView',
-    setup() {
-      const router = useRouter();
-      const form = {
+<script>
+import { mapActions } from 'vuex';
+
+export default {
+  name: 'RegisterView',
+  data() {
+    return {
+      form: {
         name: '',
         email: '',
         password: '',
         password2: ''
-      };
-  
-      const register = () => {
-        if (form.password !== form.password2) {
-          alert("Les mots de passe ne correspondent pas.");
-          return;
-        }
-  
-        getAPI.post('/register', {
-          name: form.name,
-          email: form.email,
-          password: form.password
-        })
-        .then(() => {
-          alert("Inscription réussie. Vous pouvez maintenant vous connecter.");
-          router.push('/login');
-        })
-        .catch(error => {
-          console.error("Erreur d'inscription:", error);
-          alert("Erreur lors de l'inscription.");
+      },
+      errorMessage: ''
+    };
+  },
+  methods: {
+    ...mapActions('auth', ['register']),
+    async submitRegister() {
+      try {
+        console.log("Attempting to register with data:", this.form);
+        await this.register({
+          name: this.form.name,
+          email: this.form.email,
+          password: this.form.password,
+          password2: this.form.password2
         });
-      };
-  
-      return { form, register };
+        console.log("Registration successful, redirecting to login...");
+        this.$router.push({ name: 'login' });
+      } catch (error) {
+        console.error("Registration failed with error:", error);
+        this.errorMessage = "Inscription échouée: " + (error.response?.data?.detail || error.message);
+      }
     }
-  };
-  </script>
-  
-  <style>
-  /* Styles basiques */
-  .register-container {
-    margin: auto;
-    width: 300px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
   }
-  label {
-    margin: 10px 0 5px;
-    display: block;
-  }
-  input[type="text"], input[type="email"], input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-  }
-  button {
-    padding: 10px 15px;
-    cursor: pointer;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.register-container {
+  margin: auto;
+  width: 300px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+label {
+  margin: 10px 0 5px;
+  display: block;
+}
+input[type="text"], input[type="email"], input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+button {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+.error {
+  color: red;
+}
+</style>

@@ -1,4 +1,3 @@
-// store.js
 import { createStore } from "vuex";
 import getAPI from "./axios-api";
 import router from '@/router';
@@ -50,11 +49,11 @@ const auth = {
   actions: {
     register({ commit }, credentials) {
       return getAPI.post("/register/", credentials)
-        .then(() => {
-          // Handle success if needed
+        .then(response => {
+          console.log("Registration successful:", response.data); // Log the response data for debugging
         })
         .catch((error) => {
-          console.error("Registration failed:", error);
+          console.error("Registration failed:", error.response?.data || error.message); // Log the error message for debugging
           commit("SET_AUTH_ERROR", "Registration failed");
           throw error;
         });
@@ -65,13 +64,14 @@ const auth = {
         commit("SET_TOKENS", { accessToken: response.data.access, refreshToken: response.data.refresh });
         getAPI.defaults.headers.common["Authorization"] = `Bearer ${response.data.access}`;
       } catch (error) {
-        console.error("Login failed:", error);
+        console.error("Login failed:", error.response?.data || error.message); // Log the error message for debugging
         commit("SET_AUTH_ERROR", "Login failed");
         throw error;
       }
     },
     logout({ commit }) {
       commit("CLEAR_TOKENS");
+      router.push({ name: 'login' });
     },
     toggleActiveStatus({ commit }, { user }) {
       const updatedStatus = !user.is_active;
@@ -80,7 +80,7 @@ const auth = {
           commit("UPDATE_USER_STATUS", { userId: user.id, isActive: updatedStatus });
         })
         .catch((error) => {
-          console.error("Error updating user status:", error);
+          console.error("Error updating user status:", error.response?.data || error.message); // Log the error message for debugging
           throw error;
         });
     },
@@ -95,7 +95,7 @@ const auth = {
         commit("SET_TOKENS", { accessToken: response.data.access, refreshToken: response.data.refresh });
         return response.data.access;
       } catch (error) {
-        console.error("Token refresh failed:", error);
+        console.error("Token refresh failed:", error.response?.data || error.message); // Log the error message for debugging
         commit("CLEAR_TOKENS");
         router.push({ name: 'login' });
         throw error;
@@ -103,6 +103,65 @@ const auth = {
     }
   }
 };
+
+// store/modules/recipes.js
+const recipes = {
+  state: {
+    recipesList: [],
+  },
+  getters: {
+    allRecipes: state => state.recipesList,
+  },
+  mutations: {
+    SET_RECIPES(state, recipes) {
+      state.recipesList = recipes;
+    },
+    ADD_RECIPE(state, recipe) {
+      state.recipesList.push(recipe);
+    },
+    UPDATE_RECIPE(state, updatedRecipe) {
+      const index = state.recipesList.findIndex(recipe => recipe.id === updatedRecipe.id);
+      if (index !== -1) {
+        state.recipesList.splice(index, 1, updatedRecipe);
+      }
+    },
+    REMOVE_RECIPE(state, recipeId) {
+      state.recipesList = state.recipesList.filter(recipe => recipe.id !== recipeId);
+    },
+  },
+  actions: {
+    fetchRecipes({ commit }) {
+      return getAPI.get('/api/recipes/')
+        .then(response => {
+          commit('SET_RECIPES', response.data);
+        })
+        .catch(error => console.error('Failed to fetch recipes', error));
+    },
+    createRecipe({ commit }, recipeData) {
+      return getAPI.post('/api/recipes/', recipeData)
+        .then(response => {
+          commit('ADD_RECIPE', response.data);
+        })
+        .catch(error => console.error('Failed to create recipe', error));
+    },
+    updateRecipe({ commit }, recipeData) {
+      return getAPI.put(`/api/recipes/${recipeData.id}/`, recipeData)
+        .then(response => {
+          commit('UPDATE_RECIPE', response.data);
+        })
+        .catch(error => console.error('Failed to update recipe', error));
+    },
+    deleteRecipe({ commit }, recipeId) {
+      return getAPI.delete(`/api/recipes/${recipeId}/`)
+        .then(() => {
+          commit('REMOVE_RECIPE', recipeId);
+        })
+        .catch(error => console.error('Failed to delete recipe', error));
+    },
+  }
+};
+
+export default recipes;
 
 export const store = createStore({
   modules: {
