@@ -53,15 +53,15 @@
           });
       },
       toggleActiveStatus(user) {
-        const updatedStatus = !user.is_active;
-        api.patch(`/users/${user.id}`, { is_active: updatedStatus })
-          .then(response => {
-            user.is_active = updatedStatus;  // Update the local user state to reflect changes
-          })
-          .catch(error => {
-            console.error('Error updating user status:', error);
-            this.error = 'Erreur lors de la mise à jour du statut de l\'utilisateur.';
-          });
+        // const updatedStatus = !user.is_active;
+        // api.patch(`/users/${user.id}`, { is_active: updatedStatus })
+        //   .then(response => {
+        //     user.is_active = updatedStatus;  // Update the local user state to reflect changes
+        //   })
+        //   .catch(error => {
+        //     console.error('Error updating user status:', error);
+        //     this.error = 'Erreur lors de la mise à jour du statut de l\'utilisateur.';
+        //   });
       }
     }
   };

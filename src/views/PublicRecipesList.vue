@@ -32,7 +32,6 @@
 <script>
 import getAPI from "@/axios-api";
 
-
 export default {
   name: 'PublicRecipesList',
   data() {

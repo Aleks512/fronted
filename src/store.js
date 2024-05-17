@@ -1,7 +1,6 @@
 import { createStore } from "vuex";
 import getAPI from "./axios-api";
-import jwt_decode from 'jwt-decode';
-
+import router from '@/router'; // Adjust the path based on your project structure
 
 // Define the auth module
 const auth = {
@@ -9,69 +8,64 @@ const auth = {
   state: {
     accessToken: sessionStorage.getItem('accessToken') || null,
     refreshToken: sessionStorage.getItem('refreshToken') || null,
-    authError: null, // Use null to indicate no error initially
+    accessTokenExpiresAt: sessionStorage.getItem('accessTokenExpiresAt') || null,
+    refreshTokenExpiresAt: sessionStorage.getItem('refreshTokenExpiresAt') || null,
+    authError: null,
   },
   getters: {
-    isLoggedIn: (state) => !!state.accessToken,
-    authError: (state) => state.authError, // Simplified name for consistency
+    isLoggedIn: (state) => !!state.accessToken && Date.now() < state.accessTokenExpiresAt,
+    authError: (state) => state.authError,
   },
   mutations: {
     SET_TOKENS(state, { accessToken, refreshToken }) {
-      const decoded = jwt_decode(accessToken);
-      const expiresAt = decoded.exp * 1000; // Convert to milliseconds
-  
+      const accessTokenExpiresAt = Date.now() + 30 * 60 * 1000; // 30 minutes
+      const refreshTokenExpiresAt = Date.now() + 24 * 60 * 60 * 1000; // 1 day
+
       sessionStorage.setItem('accessToken', accessToken);
       sessionStorage.setItem('refreshToken', refreshToken);
-      sessionStorage.setItem('expiresAt', expiresAt);
-  
+      sessionStorage.setItem('accessTokenExpiresAt', accessTokenExpiresAt);
+      sessionStorage.setItem('refreshTokenExpiresAt', refreshTokenExpiresAt);
+
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
-      state.expiresAt = expiresAt;
-      state.authError = null; // Reset auth error
+      state.accessTokenExpiresAt = accessTokenExpiresAt;
+      state.refreshTokenExpiresAt = refreshTokenExpiresAt;
+      state.authError = null;
     },
     CLEAR_TOKENS(state) {
       state.accessToken = null;
       state.refreshToken = null;
+      state.accessTokenExpiresAt = null;
+      state.refreshTokenExpiresAt = null;
       sessionStorage.removeItem('accessToken');
       sessionStorage.removeItem('refreshToken');
-      delete getAPI.defaults.headers.common["Authorization"]; // Remove the auth header
+      sessionStorage.removeItem('accessTokenExpiresAt');
+      sessionStorage.removeItem('refreshTokenExpiresAt');
+      delete getAPI.defaults.headers.common["Authorization"];
     },
     SET_AUTH_ERROR(state, error) {
-      state.authError = error; // Store the error message
+      state.authError = error;
     },
   },
   actions: {
     register({ commit }, credentials) {
-      return getAPI
-        .post("/register", credentials) // Ensure this matches your API endpoint
-        .then(({ data }) => {
-          commit("SET_TOKENS", {
-            accessToken: data.access, // Adjust these if your API returns different fields
-            refreshToken: data.refresh,
-          });
-          getAPI.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${data.access}`;
+      return getAPI.post("/register", credentials)
+        .then(() => {
         })
         .catch((error) => {
           console.error("Registration failed:", error);
-          commit("SET_AUTH_ERROR", "Registration failed"); // Set a general registration error
+          commit("SET_AUTH_ERROR", "Registration failed");
           throw error;
         });
     },
     async login({ commit }, credentials) {
       try {
         const response = await getAPI.post("/api-token/", credentials);
-        commit("SET_TOKENS", {
-          accessToken: response.data.access,
-          refreshToken: response.data.refresh,
-        });
-        getAPI.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${response.data.access}`;
+        commit("SET_TOKENS", { accessToken: response.data.access, refreshToken: response.data.refresh });
+        getAPI.defaults.headers.common["Authorization"] = `Bearer ${response.data.access}`;
       } catch (error) {
         console.error("Login failed:", error);
-        commit("SET_AUTH_ERROR", "Login failed"); // Set a more specific login error
+        commit("SET_AUTH_ERROR", "Login failed");
         throw error;
       }
     },
@@ -80,37 +74,32 @@ const auth = {
     },
     toggleActiveStatus({ commit }, { user }) {
       const updatedStatus = !user.is_active;
-      return getAPI
-        .patch(`/users/${user.id}`, { is_active: updatedStatus })
+      return getAPI.patch(`/users/${user.id}`, { is_active: updatedStatus })
         .then(() => {
-          commit("UPDATE_USER_STATUS", {
-            userId: user.id,
-            isActive: updatedStatus,
-          });
+          commit("UPDATE_USER_STATUS", { userId: user.id, isActive: updatedStatus });
         })
         .catch((error) => {
           console.error("Error updating user status:", error);
-          // Handle errors, for example by returning a rejected promise or using another commit for an error state
           throw error;
         });
     },
     async refreshToken({ commit, state }) {
-      if (!state.refreshToken) {
-        throw new Error("No refresh token available.");
+      if (!state.refreshToken || Date.now() >= state.refreshTokenExpiresAt) {
+        commit("CLEAR_TOKENS");
+        router.push({ name: 'login' });
+        throw new Error("Refresh token expired or not available.");
       }
       try {
         const response = await getAPI.post('/api-token-refresh/', { refresh: state.refreshToken });
-        commit("SET_TOKENS", {
-          accessToken: response.data.access,
-          refreshToken: response.data.refresh, // Assume the server sends a new refresh token
-        });
+        commit("SET_TOKENS", { accessToken: response.data.access, refreshToken: response.data.refresh });
         return response.data.access;
       } catch (error) {
         console.error("Token refresh failed:", error);
         commit("CLEAR_TOKENS");
+        router.push({ name: 'login' });
         throw error;
       }
-    },
+    }
   }
 };
 

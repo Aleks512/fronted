@@ -78,7 +78,7 @@ const routes = [
     beforeEnter: (to, from, next) => {
       // Vérifie si l'utilisateur est connecté
       if (!store.getters["auth/isLoggedIn"]) {
-        next({ name: "Login" }); // Redirige vers la page de connexion si non connecté
+        next({ name: "login" }); // Redirige vers la page de connexion si non connecté
       } else {
         next(); // Continue vers le tableau de bord si connecté
       }
