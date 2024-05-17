@@ -1,8 +1,8 @@
+// store.js
 import { createStore } from "vuex";
 import getAPI from "./axios-api";
-import router from '@/router'; // Adjust the path based on your project structure
+import router from '@/router';
 
-// Define the auth module
 const auth = {
   namespaced: true,
   state: {
@@ -49,8 +49,9 @@ const auth = {
   },
   actions: {
     register({ commit }, credentials) {
-      return getAPI.post("/register", credentials)
+      return getAPI.post("/register/", credentials)
         .then(() => {
+          // Handle success if needed
         })
         .catch((error) => {
           console.error("Registration failed:", error);
@@ -74,7 +75,7 @@ const auth = {
     },
     toggleActiveStatus({ commit }, { user }) {
       const updatedStatus = !user.is_active;
-      return getAPI.patch(`/users/${user.id}`, { is_active: updatedStatus })
+      return getAPI.patch(`/users/${user.id}/`, { is_active: updatedStatus })
         .then(() => {
           commit("UPDATE_USER_STATUS", { userId: user.id, isActive: updatedStatus });
         })
@@ -103,7 +104,6 @@ const auth = {
   }
 };
 
-// Create the Vuex store
 export const store = createStore({
   modules: {
     auth: auth,

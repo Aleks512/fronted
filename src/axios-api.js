@@ -4,6 +4,10 @@ import { store } from './store';
 const getAPI = axios.create({
   baseURL: 'http://localhost:8000',
   timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
 });
 
 let isRefreshing = false;
@@ -26,13 +30,13 @@ getAPI.interceptors.request.use(async function (config) {
   const now = Date.now();
 
   // Define public endpoints
-  const publicEndpoints = ['/api/recipes/', '/api/categories/'];
+  const publicEndpoints = ['/api/recipes/', '/api/categories/', '/register/'];
 
   // Check if the request is to a public endpoint
   const isPublicEndpoint = publicEndpoints.some(endpoint => config.url.includes(endpoint));
 
-  if (!isPublicEndpoint) {
-    if (token && accessTokenExpiresAt && (now >= parseInt(accessTokenExpiresAt) - (60 * 1000))) {
+  if (!isPublicEndpoint && token) {
+    if (now >= parseInt(accessTokenExpiresAt) - (60 * 1000)) {
       if (!isRefreshing) {
         isRefreshing = true;
         store.dispatch('auth/refreshToken').then(newToken => {
@@ -56,7 +60,7 @@ getAPI.interceptors.request.use(async function (config) {
 
     config.headers['Authorization'] = 'Bearer ' + token;
   }
-  
+
   return config;
 }, function (error) {
   return Promise.reject(error);
