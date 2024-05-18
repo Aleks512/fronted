@@ -10,9 +10,6 @@ import LogoutView from "@/views/LogoutView.vue";
 import { store } from "../store"; // Assurez-vous que le chemin est correct
 import DashboardView from "@/views/DashboardView.vue";
 import RegisterView from "@/views/RegisterView.vue"; 
-import AddReceite from "@/views/private/AddReceite.vue";
-import DeleteReceipe from "@/views/private/DeleteReceipe.vue";
-import EditReceipe from "@/views/private/EditReceipe.vue";
 
 const routes = [
   {
@@ -55,23 +52,7 @@ const routes = [
     component: PostView,
     props: true,
   },
-  {
-    path: "/add-receipe",
-    name: "add-receipe",
-    component: AddReceite,
-  },
-  {
-    path: "/delete-receipe/:id",
-    name: "delete-receipe",
-    component: DeleteReceipe,
-    props: true,
-  },
-  {
-    path: "/edit-receipe/:id",
-    name: "edit-receipe",
-    component: EditReceipe,
-    props: true,
-  },
+  
   {
     path: "/dashboard",
     name: "dashboard",
