@@ -29,7 +29,7 @@
       <button type="submit" class="btn btn-success">Ajouter la recette</button>
     </form>
 
-    <div class="table-responsive">
+    <div v-if="isLoggedIn" class="table-responsive">
       <table class="table">
         <thead>
           <tr>
@@ -60,12 +60,14 @@
       </table>
     </div>
     <p v-if="recipes.length === 0">Aucune recette trouvée. Ajoutez votre première recette!</p>
-    <router-link to="/recipe/new" class="btn btn-success">Ajouter une nouvelle recette</router-link>
+    <p v-else-if="!isLoggedIn">Vous devez être connecté pour voir vos recettes.</p>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { format } from 'date-fns';
+import getAPI from '../../axios-api';
 
 export default {
   data() {
@@ -77,62 +79,109 @@ export default {
         ingredients: '',
         picture: '',
         category: 1
-      }
+      },
+      recipes: [],
     };
   },
   computed: {
-    recipes() {
-      return this.$store.getters['recipes/allRecipes'];
-    }
+    ...mapGetters({
+      isLoggedIn: 'auth/isLoggedIn',
+    }),
   },
   created() {
-    this.fetchMyRecipes();
+    this.checkLoginAndFetch();
   },
   methods: {
-    fetchMyRecipes() {
-      this.$store.dispatch('recipes/fetchMyRecipes')
-        .then(() => {
-          console.log('Recipes fetched successfully');
+    fetchRecipes() {
+      getAPI.get('/api/my-recipes/')
+        .then((response) => {
+          console.log('Recipes fetched successfully', response.data);
+          this.recipes = response.data;
         })
-        .catch(error => {
-          console.error('Error fetching recipes:', error);
+        .catch((err) => {
+          console.error('Error fetching recipes:', err);
         });
     },
     addRecipe() {
       console.log('Adding recipe:', this.newRecipe); // Log pour débogage
-      this.$store.dispatch('recipes/createRecipe', this.newRecipe)
-        .then(() => {
-          console.log('Recipe added successfully');
-          this.newRecipe = {
-            title: '',
-            desc: '',
-            cook_time: 0,
-            ingredients: '',
-            picture: '',
-            category: 1
-          };
-          this.fetchMyRecipes();
-        })
-        .catch(error => {
-          console.error('Error adding recipe:', error);
-        });
+
+      const payload = {
+        title: this.newRecipe.title,
+        desc: this.newRecipe.desc,
+        cook_time: this.newRecipe.cook_time,
+        ingredients: this.newRecipe.ingredients,
+        category: this.newRecipe.category
+      };
+
+      // Ajoutez le champ picture seulement s'il n'est pas vide
+      if (this.newRecipe.picture) {
+        payload.picture = this.newRecipe.picture;
+      }
+
+      getAPI.post('/api/recipes/create/', payload, {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
+        }
+      })
+      .then(() => {
+        console.log('Recipe added successfully');
+        this.newRecipe = {
+          title: '',
+          desc: '',
+          cook_time: 0,
+          ingredients: '',
+          picture: '',
+          category: 1
+        };
+        this.fetchRecipes();
+      })
+      .catch(error => {
+        console.error('Error adding recipe:', error);
+        if (error.response) {
+          console.error('Response data:', error.response.data);
+          console.error('Response status:', error.response.status);
+          console.error('Response headers:', error.response.headers);
+        }
+      });
     },
     editRecipe(id) {
       this.$router.push({ name: 'edit-recipe', params: { id } });
     },
     deleteRecipe(id) {
       if (confirm('Êtes-vous sûr de vouloir supprimer cette recette ?')) {
-        this.$store.dispatch('recipes/deleteRecipe', id)
-          .then(() => {
-            console.log('Recipe deleted successfully');
-          })
-          .catch(error => {
-            console.error('Error deleting recipe:', error);
-          });
+        getAPI.delete(`/api/recipes/${id}/delete/`, {
+          headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
+          }
+        })
+        .then(() => {
+          console.log('Recipe deleted successfully');
+          this.fetchRecipes();
+        })
+        .catch(error => {
+          console.error('Error deleting recipe:', error);
+        });
       }
     },
     formatDate(date) {
       return format(new Date(date), 'dd/MM/yyyy HH:mm');
+    },
+    checkLoginAndFetch() {
+      if (this.isLoggedIn) {
+        this.fetchRecipes();
+      } else {
+        console.log('User is not logged in');
+      }
+    }
+  },
+  watch: {
+    isLoggedIn(newValue) {
+      if (newValue) {
+        this.fetchRecipes();
+      } else {
+        this.recipes = [];
+        console.log('User is not logged in or has logged out');
+      }
     }
   }
 };
