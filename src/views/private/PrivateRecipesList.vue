@@ -1,60 +1,62 @@
 <template>
   <div>
-    <h1>Mes Recettes</h1>
-    <form @submit.prevent="addRecipe">
-      <div>
+    <h1 class="my-4">Mes Recettes</h1>
+    <form @submit.prevent="addRecipe" enctype="multipart/form-data" class="mb-4">
+      <div class="form-group">
         <label for="title">Titre</label>
-        <input v-model="newRecipe.title" type="text" id="title" required>
+        <input v-model="newRecipe.title" type="text" id="title" class="form-control" required>
       </div>
-      <div>
+      <div class="form-group">
         <label for="desc">Description</label>
-        <textarea v-model="newRecipe.desc" id="desc" required></textarea>
+        <textarea v-model="newRecipe.desc" id="desc" class="form-control" required></textarea>
       </div>
-      <div>
+      <div class="form-group">
         <label for="cook_time">Temps de cuisson (minutes)</label>
-        <input v-model="newRecipe.cook_time" type="number" id="cook_time" required>
+        <input v-model="newRecipe.cook_time" type="number" id="cook_time" class="form-control" required>
       </div>
-      <div>
+      <div class="form-group">
         <label for="ingredients">Ingrédients</label>
-        <textarea v-model="newRecipe.ingredients" id="ingredients" required></textarea>
+        <textarea v-model="newRecipe.ingredients" id="ingredients" class="form-control" required></textarea>
       </div>
-      <div>
-        <label for="picture">URL de l'image</label>
-        <input v-model="newRecipe.picture" type="text" id="picture">
+      <div class="form-group">
+        <label for="picture">Image</label>
+        <input @change="onFileChange" type="file" id="picture" class="form-control-file">
       </div>
-      <div>
+      <div class="form-group">
         <label for="category">Catégorie</label>
-        <input v-model="newRecipe.category" type="number" id="category" required>
+        <input v-model="newRecipe.category" type="number" id="category" class="form-control" required>
       </div>
       <button type="submit" class="btn btn-success">Ajouter la recette</button>
     </form>
 
     <div v-if="isLoggedIn" class="table-responsive">
-      <table class="table">
+      <table class="table table-striped">
         <thead>
           <tr>
             <th>Photo</th>
             <th>Titre</th>
             <th>Date de publication</th>
             <th>Actions</th>
+            <th>ID</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="recipe in recipes" :key="recipe.id">
             <td>
-              <img v-if="recipe.picture" :src="recipe.picture" alt="Recipe Picture" style="width: 100px; height: 100px;">
+              <img v-if="recipe.picture" :src="recipe.picture" alt="Recipe Picture" class="img-thumbnail" style="width: 100px; height: 100px;">
               <div v-else>Manque le visuel</div>
             </td>
             <td>{{ recipe.title }}</td>
             <td>{{ formatDate(recipe.created_at) }}</td>
             <td>
-              <button @click="editRecipe(recipe.id)" class="btn btn-primary">
+              <button @click="editRecipe(recipe.id)" class="btn btn-primary btn-sm">
                 <i class="bi bi-pencil-fill"></i>
               </button>
-              <button @click="deleteRecipe(recipe.id)" class="btn btn-danger">
+              <button @click="deleteRecipe(recipe.id)" class="btn btn-danger btn-sm">
                 <i class="bi bi-trash-fill"></i>
               </button>
             </td>
+            <td>{{ recipe.id }}</td>
           </tr>
         </tbody>
       </table>
@@ -77,7 +79,7 @@ export default {
         desc: '',
         cook_time: 0,
         ingredients: '',
-        picture: '',
+        picture: null,
         category: 1
       },
       recipes: [],
@@ -92,6 +94,10 @@ export default {
     this.checkLoginAndFetch();
   },
   methods: {
+    onFileChange(e) {
+      const file = e.target.files[0];
+      this.newRecipe.picture = file;
+    },
     fetchRecipes() {
       getAPI.get('/api/my-recipes/')
         .then((response) => {
@@ -105,22 +111,20 @@ export default {
     addRecipe() {
       console.log('Adding recipe:', this.newRecipe); // Log pour débogage
 
-      const payload = {
-        title: this.newRecipe.title,
-        desc: this.newRecipe.desc,
-        cook_time: this.newRecipe.cook_time,
-        ingredients: this.newRecipe.ingredients,
-        category: this.newRecipe.category
-      };
-
-      // Ajoutez le champ picture seulement s'il n'est pas vide
+      const formData = new FormData();
+      formData.append('title', this.newRecipe.title);
+      formData.append('desc', this.newRecipe.desc);
+      formData.append('cook_time', this.newRecipe.cook_time);
+      formData.append('ingredients', this.newRecipe.ingredients);
+      formData.append('category', this.newRecipe.category);
       if (this.newRecipe.picture) {
-        payload.picture = this.newRecipe.picture;
+        formData.append('picture', this.newRecipe.picture);
       }
 
-      getAPI.post('/api/recipes/create/', payload, {
+      getAPI.post('/api/recipes/create/', formData, {
         headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
+          'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+          'Content-Type': 'multipart/form-data'
         }
       })
       .then(() => {
@@ -130,7 +134,7 @@ export default {
           desc: '',
           cook_time: 0,
           ingredients: '',
-          picture: '',
+          picture: null,
           category: 1
         };
         this.fetchRecipes();
@@ -148,7 +152,8 @@ export default {
       this.$router.push({ name: 'edit-recipe', params: { id } });
     },
     deleteRecipe(id) {
-      if (confirm('Êtes-vous sûr de vouloir supprimer cette recette ?')) {
+      console.log('Attempting to delete recipe with ID:', id); // Ajout de log pour débogage
+      if (confirm(`Êtes-vous sûr de vouloir supprimer cette recette ? ID: ${id}`)) {
         getAPI.delete(`/api/recipes/${id}/delete/`, {
           headers: {
             'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`
@@ -160,6 +165,11 @@ export default {
         })
         .catch(error => {
           console.error('Error deleting recipe:', error);
+          if (error.response) {
+            console.error('Response data:', error.response.data);
+            console.error('Response status:', error.response.status);
+            console.error('Response headers:', error.response.headers);
+          }
         });
       }
     },
@@ -186,7 +196,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-/* Ajoutez ici des styles spécifiques à ce composant */
-</style>
