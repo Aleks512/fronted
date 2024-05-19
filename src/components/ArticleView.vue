@@ -30,7 +30,6 @@ export default {
 .display-4 {
     font-size: 2.5rem;
     font-weight: bold;
-    line-height: 6rem;;
 }
 
 .lead {

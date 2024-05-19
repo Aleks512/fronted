@@ -2,7 +2,7 @@
 <template>
   <h1>Posts</h1>
   <div v-if="isLoggedIn" class="posts">
-    <!-- TODO:Add Navbar here if needed -->
+   
     <div class="album py-5 bg-light">
       <div class="container">
         <div class="row">

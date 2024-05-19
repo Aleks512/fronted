@@ -1,6 +1,6 @@
 <template>
     <div class="container m-auto" style="height: 70vh;">
-        <h1>Our passionate authors</h1>
+        <h1 class="section-title">Our passionate authors</h1>
         <div class="team-view d-flex justify-content-between">
             <div v-for="person in team" :key="person.id" class="person-card card" style="width: 300px; margin: 10px;">
             <img :src="require(`@/assets/team/${person.photo}`)" alt="Person Photo" class="person-photo card-img-top mx-auto d-block" style="width: 200px; height: 200px;">
@@ -69,7 +69,8 @@ export default {
 }
 h3{
     text-align: center;
-    font-size: 1rem !important;
+    color: brown;
+    margin: 10px;
 
 };
 

@@ -1,84 +1,81 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import AboutView from "@/views/AboutView.vue";
-import PublicRecipesList from "@/views/PublicRecipesList.vue";
-import PublicRecipeDetail from "@/views/PublicRecipeDetail.vue";
-import PostsView from "@/views/posts/PostsView.vue";
-import PostView from "@/views/posts/PostView.vue";
-import LoginView from "@/views/LoginView.vue";
-import LogoutView from "@/views/LogoutView.vue";
 import { store } from "../store"; // Assurez-vous que le chemin est correct
-import DashboardView from "@/views/DashboardView.vue";
-import RegisterView from "@/views/RegisterView.vue"; 
 
 const routes = [
   {
     path: "/",
     name: "home",
-    component: HomeView,
+    component: () => import("@/views/HomeView.vue"),
   },
   {
     path: "/about",
     name: "about",
-    component: AboutView,
+    component: () => import("@/views/AboutView.vue"),
   },
   {
-    path: '/recipes-list',
-    name: 'PublicRecipesList',
-    component: PublicRecipesList,
-    props: true
+    path: "/recipes-list",
+    name: "PublicRecipesList",
+    component: () => import("@/views/PublicRecipesList.vue"),
+    props: true,
   },
   {
-    path: '/recipe/:id',
-    name: 'PublicRecipeDetail',
-    component: PublicRecipeDetail,
-    props: true
+    path: "/recipe/:id",
+    name: "PublicRecipeDetail",
+    component: () => import("@/views/PublicRecipeDetail.vue"),
+    props: true,
   },
   {
     path: "/posts",
     name: "posts",
-    component: PostsView,
-    beforeEnter: (to, from, next) => {
-      if (store.getters["auth/isLoggedIn"]) {
-        next();
-      } else {
-        next({ name: "login" }); // Redirigez vers la page de connexion si non connecté
-      }
-    },
+    component: () => import("@/views/posts/PostsView.vue"),
+    meta: { requiresAuth: true },
   },
-  {
-    path: "/post/:id",
-    name: "post",
-    component: PostView,
-    props: true,
-  },
-  
   {
     path: "/dashboard",
     name: "dashboard",
-    component: DashboardView,
-    beforeEnter: (to, from, next) => {
-      if (!store.getters["auth/isLoggedIn"]) {
-        next({ name: "login" }); // Redirige vers la page de connexion si non connecté
-      } else {
-        next(); // Continue vers le tableau de bord si connecté
-      }
-    },
+    component: () => import("@/views/DashboardView.vue"),
+    meta: { requiresAuth: true },
   },
   {
     path: "/register",
     name: "register",
-    component: RegisterView,
+    component: () => import("@/views/RegisterView.vue"),
   },
   {
     path: "/login",
     name: "login",
-    component: LoginView,
+    component: () => import("@/views/LoginView.vue"),
   },
   {
     path: "/logout",
     name: "logout",
-    component: LogoutView,
+    component: () => import("@/views/LogoutView.vue"),
+  },
+  {
+    path: "/my-recipes",
+    name: "private-recipes-list",
+    component: () => import("@/views/private/PrivateRecipesList.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/recipe/new",
+    name: "create-recipe",
+    component: () => import("@/views/private/RecipeForm.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/recipe/edit/:id",
+    name: "edit-recipe",
+    component: () => import("@/views/private/RecipeForm.vue"),
+    meta: { requiresAuth: true },
+    props: true, // Assurez-vous de passer les props
+  },
+  {
+    path: "/recipe/:id",
+    name: "private-recipe-detail",
+    component: () => import("@/views/private/PrivateRecipeDetail.vue"),
+    meta: { requiresAuth: true },
+    props: true,
   },
   {
     path: "/about-us",
@@ -97,6 +94,20 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+// Guard global pour vérifier les routes nécessitant une authentification
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // Cette route nécessite une authentification
+    if (store.getters["auth/isLoggedIn"]) {
+      next(); // L'utilisateur est connecté, continuer vers la route
+    } else {
+      next({ name: "login" }); // Rediriger vers la page de connexion
+    }
+  } else {
+    next(); // Pas de vérification nécessaire, continuer vers la route
+  }
 });
 
 export default router;

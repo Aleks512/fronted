@@ -38,7 +38,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #041423;
-  
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Bad+Script&family=Open+Sans:wght@400;700&display=swap');
@@ -50,9 +49,19 @@ body {
 }
 
 /* Add styles using the fonts */
-h1, h2, h3 {
+h1{
     font-family: 'Lobster', cursive;
-    font: 2em !important;
+    
+  
+}
+h2, h3{
+    font-family: 'Lobster', cursive;
+    font-size: 1rem;
+}
+
+.section-title {
+    margin-bottom: 5rem;
+   
 }
 
 p {

@@ -12,9 +12,9 @@
           <li class="nav-item">
             <router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link :to="{ name: 'about' }" class="nav-link">About</router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link :to="{ name: 'PublicRecipesList' }" class="nav-link">Receipes</router-link>
           </li>
@@ -28,6 +28,9 @@
           </li>
           <li v-if="!isLoggedIn" class="nav-item">
             <router-link :to="{ name: 'register' }" class="nav-link">Signup</router-link>
+          </li>
+          <li v-if="isLoggedIn" class="nav-item">
+            <router-link :to="{ name: 'private-recipes-list' }" class="nav-link">Mes recettes</router-link>
           </li>
           <li v-if="isLoggedIn" class="nav-item">
             <router-link :to="{ name: 'logout' }" class="nav-link">Logout</router-link>
@@ -55,7 +58,7 @@
   };
   </script>
   
-  <style scoped>
+  <style>
   nav {
     font-family: 'Arial', sans-serif;
     font-size: 1rem !important;
