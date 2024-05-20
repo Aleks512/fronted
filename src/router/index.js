@@ -19,10 +19,10 @@ const routes = [
     props: true,
   },
   {
-    path: "/recipe/:id",
-    name: "PublicRecipeDetail",
-    component: () => import("@/views/PublicRecipeDetail.vue"),
-    props: true,
+    path: '/recipe/:id',
+    name: 'public-recipe-detail',
+    component: () => import('@/views/PublicRecipeDetail.vue'),
+    props: route => ({ id: Number(route.params.id) }) // Convertir l'ID en nombre
   },
   {
     path: "/posts",
@@ -56,19 +56,6 @@ const routes = [
     name: "private-recipes-list",
     component: () => import("@/views/private/PrivateRecipesList.vue"),
     meta: { requiresAuth: true },
-  },
-  {
-    path: "/recipe/new",
-    name: "create-recipe",
-    component: () => import("@/views/private/RecipeForm.vue"),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/recipe/edit/:id",
-    name: "edit-recipe",
-    component: () => import("@/views/private/RecipeForm.vue"),
-    meta: { requiresAuth: true },
-    props: true, // Assurez-vous de passer les props
   },
   {
     path: "/recipe/:id",

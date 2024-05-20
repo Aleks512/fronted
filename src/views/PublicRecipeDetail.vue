@@ -2,19 +2,24 @@
   <div class="container mt-5" v-if="recipe">
     <div class="row">
       <div class="col-md-8">
-        <h1>{{ recipe.title }}</h1>
-        <img :src="getImageUrl(recipe.picture)" class="img-fluid img-thumbnail" alt="Image de la recette"
-          v-if="recipe.picture">
-        <p class="mt-3"><strong>Description:</strong> {{ recipe.desc }}</p>
+        <h1 class="display-4">{{ recipe.title }}</h1>
+        <img :src="getImageUrl(recipe.picture)" class="img-fluid img-thumbnail my-3" alt="Image de la recette" v-if="recipe.picture">
+        <p class="lead"><strong>Description:</strong> {{ recipe.desc }}</p>
         <p><strong>Temps de cuisson:</strong> {{ recipe.cook_time }} minutes</p>
       </div>
       <div class="col-md-4">
-        <h2>Ingrédients</h2>
-        <ul>
-          <li v-for="(ingredient, index) in recipe.ingredients.split(',')" :key="index">{{ ingredient }}</li>
-        </ul>
-        <h2>Author</h2>
-        <div>{{ recipe.author }}</div>
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">Catégorie</h2>
+            <p class="card-text">{{ recipe.category_name }}</p>
+            <h2 class="card-title mt-4">Ingrédients</h2>
+            <ul class="list-group list-group-flush">
+              <li v-for="(ingredient, index) in recipe.ingredients.split(',')" :key="index" class="list-group-item">{{ ingredient }}</li>
+            </ul>
+            <h2 class="card-title mt-4">Auteur</h2>
+            <p class="card-text">{{ recipe.author_name }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -65,5 +70,18 @@ export default {
 h1,
 h2 {
   color: #2c3e50;
+}
+
+.card-title {
+  color: #2c3e50;
+}
+
+.lead {
+  font-size: 1.25rem;
+}
+
+.list-group-item {
+  border: none;
+  padding-left: 0;
 }
 </style>
