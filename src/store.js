@@ -104,67 +104,10 @@ const auth = {
   }
 };
 
-// store/modules/recipes.js
-const recipes = {
-  namespaced: true, // Ajout du namespace
-  state: {
-    recipesList: [],
-  },
-  getters: {
-    allRecipes: state => state.recipesList,
-  },
-  mutations: {
-    SET_RECIPES(state, recipes) {
-      state.recipesList = recipes;
-    },
-    ADD_RECIPE(state, recipe) {
-      state.recipesList.push(recipe);
-    },
-    UPDATE_RECIPE(state, updatedRecipe) {
-      const index = state.recipesList.findIndex(recipe => recipe.id === updatedRecipe.id);
-      if (index !== -1) {
-        state.recipesList.splice(index, 1, updatedRecipe);
-      }
-    },
-    REMOVE_RECIPE(state, recipeId) {
-      state.recipesList = state.recipesList.filter(recipe => recipe.id !== recipeId);
-    },
-  },
-  actions: {
-    fetchMyRecipes({ commit }) {
-      return getAPI.get('/api/my-recipes/')
-        .then(response => {
-          commit('SET_RECIPES', response.data);
-        })
-        .catch(error => console.error('Failed to fetch recipes', error));
-    },
-    createRecipe({ commit }, recipeData) {
-      return getAPI.post('/api/recipes/create/', recipeData)
-        .then(response => {
-          commit('ADD_RECIPE', response.data);
-        })
-        .catch(error => console.error('Failed to create recipe', error));
-    },
-    updateRecipe({ commit }, recipeData) {
-      return getAPI.put(`/api/recipes/${recipeData.id}/update/`, recipeData)
-        .then(response => {
-          commit('UPDATE_RECIPE', response.data);
-        })
-        .catch(error => console.error('Failed to update recipe', error));
-    },
-    deleteRecipe({ commit }, recipeId) {
-      return getAPI.delete(`/api/recipes/${recipeId}/delate`)
-        .then(() => {
-          commit('REMOVE_RECIPE', recipeId);
-        })
-        .catch(error => console.error('Failed to delete recipe', error));
-    },
-  }
-};
+// Création du store
 
 export const store = createStore({
   modules: {
     auth : auth, // Enregistrement du module auth
-    recipes :recipes // Enregistrement du module recipes
   }
 });
