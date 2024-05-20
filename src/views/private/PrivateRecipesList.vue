@@ -1,6 +1,11 @@
 <template>
   <div>
     <h1 class="my-4">Mes Recettes</h1>
+    <!-- Zone de notification -->
+    <div v-if="successMessage" class="alert alert-success" role="alert">
+      {{ successMessage }}
+    </div>
+
     <form @submit.prevent="addRecipe" enctype="multipart/form-data" class="mb-4">
       <div class="form-group">
         <label for="title">Titre</label>
@@ -33,15 +38,16 @@
       <table class="table table-striped">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Photo</th>
             <th>Titre</th>
             <th>Date de publication</th>
             <th>Actions</th>
-            <th>ID</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="recipe in recipes" :key="recipe.id">
+            <td>{{ recipe.id }}</td>
             <td>
               <img v-if="recipe.picture" :src="recipe.picture" alt="Recipe Picture" class="img-thumbnail" style="width: 100px; height: 100px;">
               <div v-else>Manque le visuel</div>
@@ -49,14 +55,13 @@
             <td>{{ recipe.title }}</td>
             <td>{{ formatDate(recipe.created_at) }}</td>
             <td>
-              <button @click="editRecipe(recipe.id)" class="btn btn-primary btn-sm">
+              <button @click="editRecipe(recipe)" class="btn btn-primary btn-sm">
                 <i class="bi bi-pencil-fill"></i>
               </button>
               <button @click="deleteRecipe(recipe.id)" class="btn btn-danger btn-sm">
                 <i class="bi bi-trash-fill"></i>
               </button>
             </td>
-            <td>{{ recipe.id }}</td>
           </tr>
         </tbody>
       </table>
@@ -83,6 +88,9 @@ export default {
         category: 1
       },
       recipes: [],
+      isEditMode: false,
+      editRecipeId: null,
+      successMessage: '', // Message de succès
     };
   },
   computed: {
@@ -121,26 +129,25 @@ export default {
         formData.append('picture', this.newRecipe.picture);
       }
 
-      getAPI.post('/api/recipes/create/', formData, {
+      let apiMethod = this.isEditMode ? 'put' : 'post';
+      let apiUrl = this.isEditMode ? `/api/recipes/${this.editRecipeId}/update/` : '/api/recipes/create/';
+
+      getAPI[apiMethod](apiUrl, formData, {
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
           'Content-Type': 'multipart/form-data'
         }
       })
       .then(() => {
-        console.log('Recipe added successfully');
-        this.newRecipe = {
-          title: '',
-          desc: '',
-          cook_time: 0,
-          ingredients: '',
-          picture: null,
-          category: 1
-        };
+        this.successMessage = `Recette ${this.isEditMode ? 'mise à jour' : 'ajoutée'} avec succès`;
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
+        this.resetForm();
         this.fetchRecipes();
       })
       .catch(error => {
-        console.error('Error adding recipe:', error);
+        console.error(`Error ${this.isEditMode ? 'updating' : 'adding'} recipe:`, error);
         if (error.response) {
           console.error('Response data:', error.response.data);
           console.error('Response status:', error.response.status);
@@ -148,8 +155,10 @@ export default {
         }
       });
     },
-    editRecipe(id) {
-      this.$router.push({ name: 'edit-recipe', params: { id } });
+    editRecipe(recipe) {
+      this.isEditMode = true;
+      this.editRecipeId = recipe.id;
+      this.newRecipe = { ...recipe, picture: null }; // Exclude picture to avoid issues with FormData
     },
     deleteRecipe(id) {
       console.log('Attempting to delete recipe with ID:', id); // Ajout de log pour débogage
@@ -160,7 +169,10 @@ export default {
           }
         })
         .then(() => {
-          console.log('Recipe deleted successfully');
+          this.successMessage = 'Recette supprimée avec succès';
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
           this.fetchRecipes();
         })
         .catch(error => {
@@ -182,6 +194,18 @@ export default {
       } else {
         console.log('User is not logged in');
       }
+    },
+    resetForm() {
+      this.newRecipe = {
+        title: '',
+        desc: '',
+        cook_time: 0,
+        ingredients: '',
+        picture: null,
+        category: 1
+      };
+      this.isEditMode = false;
+      this.editRecipeId = null;
     }
   },
   watch: {
@@ -196,3 +220,7 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+
+</style>
