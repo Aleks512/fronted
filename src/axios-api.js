@@ -26,7 +26,7 @@ const processQueue = (error, token = null) => {
 
 getAPI.interceptors.request.use(async function (config) {
   const token = sessionStorage.getItem('accessToken');
-  const accessTokenExpiresAt = sessionStorage.getItem('accessTokenExpiresAt');
+  const accessTokenExpiresAt = parseInt(sessionStorage.getItem('accessTokenExpiresAt'), 10);
   const now = Date.now();
 
   // Define public endpoints
@@ -35,14 +35,23 @@ getAPI.interceptors.request.use(async function (config) {
   // Check if the request is to a public endpoint
   const isPublicEndpoint = publicEndpoints.some(endpoint => config.url.includes(endpoint));
 
+  console.log('Request Interceptor: Checking token expiry and refreshing if necessary');
+
   if (!isPublicEndpoint && token) {
-    if (now >= parseInt(accessTokenExpiresAt) - (60 * 1000)) {
+    console.log(`Token expires at: ${new Date(accessTokenExpiresAt)}`);
+    console.log(`Current time: ${new Date(now)}`);
+
+    if (now >= accessTokenExpiresAt - (60 * 1000)) {
+      console.log('Token is about to expire or has expired. Attempting to refresh.');
+
       if (!isRefreshing) {
         isRefreshing = true;
         store.dispatch('auth/refreshToken').then(newToken => {
+          console.log('Token refreshed successfully:', newToken); // Log pour débogage
           isRefreshing = false;
           processQueue(null, newToken);
         }).catch(error => {
+          console.error('Error refreshing token:', error); // Log pour débogage
           isRefreshing = false;
           processQueue(error);
         });

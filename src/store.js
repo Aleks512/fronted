@@ -7,8 +7,8 @@ const auth = {
   state: {
     accessToken: sessionStorage.getItem('accessToken') || null,
     refreshToken: sessionStorage.getItem('refreshToken') || null,
-    accessTokenExpiresAt: sessionStorage.getItem('accessTokenExpiresAt') || null,
-    refreshTokenExpiresAt: sessionStorage.getItem('refreshTokenExpiresAt') || null,
+    accessTokenExpiresAt: parseInt(sessionStorage.getItem('accessTokenExpiresAt'), 10) || null,
+    refreshTokenExpiresAt: parseInt(sessionStorage.getItem('refreshTokenExpiresAt'), 10) || null,
     authError: null,
   },
   getters: {
@@ -30,6 +30,10 @@ const auth = {
       state.accessTokenExpiresAt = accessTokenExpiresAt;
       state.refreshTokenExpiresAt = refreshTokenExpiresAt;
       state.authError = null;
+
+      console.log('Tokens set successfully');
+      console.log(`Access Token Expires At: ${new Date(accessTokenExpiresAt)}`);
+      console.log(`Refresh Token Expires At: ${new Date(refreshTokenExpiresAt)}`);
     },
     CLEAR_TOKENS(state) {
       state.accessToken = null;
@@ -41,6 +45,8 @@ const auth = {
       sessionStorage.removeItem('accessTokenExpiresAt');
       sessionStorage.removeItem('refreshTokenExpiresAt');
       delete getAPI.defaults.headers.common["Authorization"];
+
+      console.log('Tokens cleared');
     },
     SET_AUTH_ERROR(state, error) {
       state.authError = error;
@@ -73,17 +79,6 @@ const auth = {
       commit("CLEAR_TOKENS");
       router.push({ name: 'login' });
     },
-    toggleActiveStatus({ commit }, { user }) {
-      const updatedStatus = !user.is_active;
-      return getAPI.patch(`/users/${user.id}/`, { is_active: updatedStatus })
-        .then(() => {
-          commit("UPDATE_USER_STATUS", { userId: user.id, isActive: updatedStatus });
-        })
-        .catch((error) => {
-          console.error("Error updating user status:", error.response?.data || error.message); // Log the error message for debugging
-          throw error;
-        });
-    },
     async refreshToken({ commit, state }) {
       if (!state.refreshToken || Date.now() >= state.refreshTokenExpiresAt) {
         commit("CLEAR_TOKENS");
@@ -93,6 +88,7 @@ const auth = {
       try {
         const response = await getAPI.post('/api-token-refresh/', { refresh: state.refreshToken });
         commit("SET_TOKENS", { accessToken: response.data.access, refreshToken: response.data.refresh });
+        console.log('Token refreshed successfully'); // Log pour débogage
         return response.data.access;
       } catch (error) {
         console.error("Token refresh failed:", error.response?.data || error.message); // Log the error message for debugging
@@ -108,6 +104,6 @@ const auth = {
 
 export const store = createStore({
   modules: {
-    auth : auth, // Enregistrement du module auth
+    auth: auth,
   }
 });
