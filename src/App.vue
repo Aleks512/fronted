@@ -6,16 +6,19 @@
   <button @click="forward">Forward</button> -->
 
   <router-view/>
+  <FooterView />
 </template>
 
 <script>
 import NavBar from '@/components/NavbarView.vue'
+import FooterView from './components/FooterView.vue';
 
 
 export default {
   name: 'App',
   components: {
-    NavBar
+    NavBar,
+    FooterView
   },
   methods: {
     redirect() {
