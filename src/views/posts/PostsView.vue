@@ -2,7 +2,7 @@
   <h1>Evenements </h1>
 
   
-      <div class="container">
+      <div class="container-lg">
         <div class="row">
           <!-- Display posts fetched from the API -->
           <div v-for="post in APIData" :key="post.id" class="col-md-4">

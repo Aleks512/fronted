@@ -1,28 +1,37 @@
 <template>
-  <div class="register-container container mt-5">
-    <h1 class="mb-4">Inscription</h1>
-    <form @submit.prevent="submitRegister">
-      <div class="mb-3">
-        <label for="name" class="form-label">Nom :</label>
-        <input id="name" type="text" class="form-control" v-model="form.name" required>
+  <div class="container position-relative mt-5 p-0">
+    <div class="row no-gutters">
+      <div class="col-12">
+        <img :src="backgroundImage" class="img-fluid w-100" alt="Background Image" style="height: 100vh; object-fit: cover; filter: brightness(50%);">
+        <div class="position-absolute top-50 start-50 translate-middle w-100">
+          <div class="col-md-6 offset-md-3 bg-white p-5 rounded shadow-lg" style="background: rgba(255, 255, 255, 0.8);">
+            <h1 class="mb-4 text-center">Inscription</h1>
+            <form @submit.prevent="submitRegister">
+              <div class="mb-3">
+                <label for="name" class="form-label">Nom :</label>
+                <input id="name" type="text" class="form-control" v-model="form.name" required>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email :</label>
+                <input id="email" type="email" class="form-control" v-model="form.email" required>
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Mot de passe :</label>
+                <input id="password" type="password" class="form-control" v-model="form.password" required>
+              </div>
+              <div class="mb-3">
+                <label for="password2" class="form-label">Confirmer le mot de passe :</label>
+                <input id="password2" type="password" class="form-control" v-model="form.password2" required>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
+              </div>
+            </form>
+            <div v-if="errorMessage" class="text-danger mt-3 text-center">{{ errorMessage }}</div>
+          </div>
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email :</label>
-        <input id="email" type="email" class="form-control" v-model="form.email" required>
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Mot de passe :</label>
-        <input id="password" type="password" class="form-control" v-model="form.password" required>
-      </div>
-      <div class="mb-3">
-        <label for="password2" class="form-label">Confirmer le mot de passe :</label>
-        <input id="password2" type="password" class="form-control" v-model="form.password2" required>
-      </div>
-      <div>
-        <button type="submit" class="btn btn-primary">S'inscrire</button>
-      </div>
-    </form>
-    <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
+    </div>
   </div>
 </template>
 
@@ -39,7 +48,8 @@ export default {
         password: '',
         password2: ''
       },
-      errorMessage: ''
+      errorMessage: '',
+      backgroundImage: require('@/assets/salad-cezar2.webp') // Charger l'image de fond
     };
   },
   methods: {
@@ -65,26 +75,24 @@ export default {
 </script>
 
 <style scoped>
-.register-container {
-  margin: auto;
-  width: 300px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+.container-fluid {
+  padding: 0;
+  margin: 0;
 }
-label {
-  margin: 10px 0 5px;
-  display: block;
+
+.no-gutters {
+  margin: 0;
 }
-input[type="text"], input[type="email"], input[type="password"] {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
+
+.img-fluid {
+  filter: brightness(50%);
 }
-button {
-  padding: 10px 15px;
-  cursor: pointer;
+
+.bg-white {
+  background: rgba(255, 255, 255, 0.8) !important;
 }
-.error {
-  color: red;
+
+.shadow-lg {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
 }
 </style>

@@ -30,7 +30,7 @@ getAPI.interceptors.request.use(async function (config) {
   const now = Date.now();
 
   // Define public endpoints
-  const publicEndpoints = ['/api/recipes/', '/api/categories/', '/register/'];
+  const publicEndpoints = ['/api/recipes/', '/api/categories/', '/register/', '/login/', '/posts/'];
 
   // Check if the request is to a public endpoint
   const isPublicEndpoint = publicEndpoints.some(endpoint => config.url.includes(endpoint));

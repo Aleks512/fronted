@@ -8,11 +8,6 @@ const routes = [
     component: () => import("@/views/HomeView.vue"),
   },
   {
-    path: "/about",
-    name: "about",
-    component: () => import("@/views/AboutView.vue"),
-  },
-  {
     path: "/recipes-list",
     name: "PublicRecipesList",
     component: () => import("@/views/PublicRecipesList.vue"),
@@ -28,14 +23,8 @@ const routes = [
     path: "/posts",
     name: "posts",
     component: () => import("@/views/posts/PostsView.vue"),
-    meta: { requiresAuth: true },
   },
-  {
-    path: "/dashboard",
-    name: "dashboard",
-    component: () => import("@/views/DashboardView.vue"),
-    meta: { requiresAuth: true },
-  },
+
   {
     path: "/register",
     name: "register",
@@ -56,13 +45,6 @@ const routes = [
     name: "private-recipes-list",
     component: () => import("@/views/private/PrivateRecipesList.vue"),
     meta: { requiresAuth: true },
-  },
-  {
-    path: "/recipe/:id",
-    name: "private-recipe-detail",
-    component: () => import("@/views/private/PrivateRecipeDetail.vue"),
-    meta: { requiresAuth: true },
-    props: true,
   },
   {
     path: "/about-us",
