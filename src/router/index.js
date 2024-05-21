@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { store } from "../store"; // Assurez-vous que le chemin est correct
-
+import PublicRecipeDetail from "@/views/PublicRecipeDetail.vue";
 const routes = [
   {
     path: "/",
@@ -19,10 +19,10 @@ const routes = [
     props: true,
   },
   {
-    path: '/recipe/:id',
-    name: 'public-recipe-detail',
-    component: () => import('@/views/PublicRecipeDetail.vue'),
-    props: route => ({ id: Number(route.params.id) }) // Convertir l'ID en nombre
+    path: "/recipe/:id",
+    name: "PublicRecipeDetail",
+    component: PublicRecipeDetail,
+    props: route => ({ id: Number(route.params.id) }), // Conversion explicite de id en Number
   },
   {
     path: "/posts",
