@@ -12,8 +12,8 @@ export default {
     name: 'ArticleView',
     data() {
         return {
-            title: "Healthy Eating: Nourishing Body and Mind",
-            content: "Healthy eating is not about strict dietary limitations, staying unrealistically thin, or depriving yourself of the foods you love. Rather, it’s about feeling great, having more energy, improving your health, and boosting your mood. If you feel overwhelmed by all the conflicting nutrition and diet advice out there, you’re not alone. It seems that for every expert who tells you a certain food is good for you, you’ll find another saying exactly the opposite. But by using these simple tips, you can cut through the confusion and learn how to create a tasty, varied, and healthy diet that is as good for your mind as it is for your body."
+            title: "Alimentation saine : nourrir le corps et l'esprit",
+            content: "Manger sainement ne consiste pas à suivre des restrictions alimentaires strictes, à rester irréalistement mince ou à vous priver des aliments que vous aimez. Au contraire, il s'agit de se sentir bien, d'avoir plus d'énergie, d'améliorer votre santé et de stimuler votre humeur. Si vous vous sentez dépassé par tous les conseils contradictoires en matière de nutrition et de régime alimentaire, vous n'êtes pas seul. Il semble que pour chaque expert qui vous dit qu'un certain aliment est bon pour vous, vous en trouverez un autre qui dit exactement le contraire. Mais en suivant ces simples recettes, vous pouvez vous débarrasser de la confusion et apprendre à créer un régime alimentaire savoureux, varié et sain qui est aussi bon pour votre esprit que pour votre corps."
         };
     }
 }

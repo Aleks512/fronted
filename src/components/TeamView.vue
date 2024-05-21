@@ -1,6 +1,6 @@
 <template>
     <div class="container m-auto" style="height: 70vh;">
-        <h1>Our passionate authors</h1>
+        <h1>Nos auteurs passionnés</h1>
         <div class="team-view d-flex justify-content-between">
             <div v-for="person in team" :key="person.id" class="person-card card" style="width: 300px; margin: 10px;">
             <img :src="require(`@/assets/team/${person.photo}`)" alt="Person Photo" class="person-photo card-img-top mx-auto d-block" style="width: 200px; height: 200px;">
@@ -23,7 +23,7 @@ export default {
                 {
                     id: 1,
                     name: "Aleksa Dupont",
-                    role: "Developer",
+                    role: "Expert-comptable",
                     photo: "F_black_business.webp"
                 },
                 {
@@ -34,21 +34,27 @@ export default {
                 },
                 {
                     id: 3,
-                    name: "Harry Potter",
-                    role: "Developer",
+                    name: "Bruce Lee",
+                    role: "Kinésithérapeute",
                     photo: "H_asia_cook.webp"
                 },
                 {
                     id: 4,
                     name: "Kris Dupont",
-                    role: "Designer",
+                    role: "Developpeur web",
                     photo: "h_middleE_decontracté.webp"
                 },
                 {
                     id: 5,
                     name: "Laura Dupont",
-                    role: "Teacher",
+                    role: "Infirmière libérale,",
                     photo: "F_white_smile.webp"
+                },
+                {
+                    id: 6,
+                    name: "Laura Craft",
+                    role: "Vétérinaire",
+                    photo: "F_white_smile2.webp"
                 },
 
             ]
@@ -84,4 +90,4 @@ h3{
     min-height: 400px !important;
 }
 
-</style>
+</style>style
