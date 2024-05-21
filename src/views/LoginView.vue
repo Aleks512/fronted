@@ -15,7 +15,7 @@
                 <label for="password">Password</label>
                 <input v-model="password" type="password" class="form-control" id="password" placeholder="Enter password" required>
               </div>
-              <button type="submit" class="btn btn-primary w-100">Login</button>
+              <button type="submit" class="btn btn-custom w-100">Login</button>
             </form>
           </div>
         </div>
@@ -30,7 +30,7 @@ export default {
     return {
       email: '',
       password: '',
-      logo: require('@/assets/salad-cezar2.webp') // Charger l'image du logo
+      logo: require('@/assets/pages/vegetarian_meal.webp') 
     };
   },
   computed: {
@@ -73,7 +73,7 @@ export default {
 }
 
 .bg-white {
-  background: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(237, 255, 204, 0.8) !important;
 }
 
 .shadow-lg {

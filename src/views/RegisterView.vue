@@ -24,7 +24,7 @@
                 <input id="password2" type="password" class="form-control" v-model="form.password2" required>
               </div>
               <div>
-                <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
+                <button type="submit" class="btn btn-custom w-100">S'inscrire</button>
               </div>
             </form>
             <div v-if="errorMessage" class="text-danger mt-3 text-center">{{ errorMessage }}</div>
@@ -49,7 +49,7 @@ export default {
         password2: ''
       },
       errorMessage: '',
-      backgroundImage: require('@/assets/salad-cezar2.webp') // Charger l'image de fond
+      backgroundImage: require('@/assets/pages/ananas_salad.webp') // Charger l'image de fond
     };
   },
   methods: {
@@ -89,10 +89,15 @@ export default {
 }
 
 .bg-white {
-  background: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(237, 255, 204, 0.8) !important;
 }
 
 .shadow-lg {
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
 }
+btn-custom {
+    font-family: 'cursive'!important;
+    background-color: #E60020 !important;
+}
+
 </style>

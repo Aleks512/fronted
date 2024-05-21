@@ -49,14 +49,18 @@ body {
 }
 
 /* Add styles using the fonts */
-h1{
+h1, h3{
     font-family: 'Lobster', cursive;
-    
-  
+    font-size: 3rem;
 }
-h2, h3{
-    font-family: 'Lobster', cursive;
+h2{
+    font-family: 'Bad Script';
     font-size: 2rem;
+}
+
+btn-custom {
+    font-family: 'cursive'!important;
+    background-color: #E60020 !important;
 }
 
 .section-title {

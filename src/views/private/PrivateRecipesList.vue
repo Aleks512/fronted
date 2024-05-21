@@ -1,73 +1,77 @@
 <template>
-  <div>
-    <h1 class="my-4">Mes Recettes</h1>
-    <!-- Zone de notification -->
-    <div v-if="successMessage" class="alert alert-success" role="alert">
-      {{ successMessage }}
-    </div>
+  <div class="container-fluid mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2 bg-white p-5 rounded shadow-lg form-container">
+        <h1 class="attributs my-4 text-center">Mes Recettes</h1>
+        <!-- Zone de notification -->
+        <div v-if="successMessage" class="alert alert-success" role="alert">
+          {{ successMessage }}
+        </div>
 
-    <form @submit.prevent="addRecipe" enctype="multipart/form-data" class="mb-4">
-      <div class="form-group">
-        <label for="title">Titre</label>
-        <input v-model="newRecipe.title" type="text" id="title" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="desc">Description</label>
-        <textarea v-model="newRecipe.desc" id="desc" class="form-control" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="cook_time">Temps de cuisson (minutes)</label>
-        <input v-model="newRecipe.cook_time" type="number" id="cook_time" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="ingredients">Ingrédients</label>
-        <textarea v-model="newRecipe.ingredients" id="ingredients" class="form-control" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="picture">Image</label>
-        <input @change="onFileChange" type="file" id="picture" class="form-control-file">
-      </div>
-      <div class="form-group">
-        <label for="category">Catégorie</label>
-        <input v-model="newRecipe.category" type="number" id="category" class="form-control" required>
-      </div>
-      <button type="submit" class="btn btn-success">Ajouter la recette</button>
-    </form>
+        <form @submit.prevent="addRecipe" enctype="multipart/form-data" class="mb-4">
+          <div class="form-group m-2">
+            <label for="title">Titre</label>
+            <input v-model="newRecipe.title" type="text" id="title" class="form-control" required>
+          </div>
+          <div class="form-group m-2">
+            <label for="desc">Description</label>
+            <textarea v-model="newRecipe.desc" id="desc" class="form-control" required></textarea>
+          </div>
+          <div class="form-group m-2">
+            <label for="cook_time">Temps de cuisson (minutes)</label>
+            <input v-model="newRecipe.cook_time" type="number" id="cook_time" class="form-control" required>
+          </div>
+          <div class="form-group m-2">
+            <label for="ingredients">Ingrédients</label>
+            <textarea v-model="newRecipe.ingredients" id="ingredients" class="form-control" required></textarea>
+          </div>
+          <div class="form-group m-2">
+            <label for="picture">Image</label>
+            <input @change="onFileChange" type="file" id="picture" class="form-control-file m-2">
+          </div>
+          <div class="form-group m-2">
+            <label for="category">Catégorie</label>
+            <input v-model="newRecipe.category" type="number" id="category" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-custom">Editer la recette</button>
+        </form>
 
-    <div v-if="isLoggedIn" class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Photo</th>
-            <th>Titre</th>
-            <th>Date de publication</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="recipe in recipes" :key="recipe.id">
-            <td>{{ recipe.id }}</td>
-            <td>
-              <img v-if="recipe.picture" :src="recipe.picture" alt="Recipe Picture" class="img-thumbnail" style="width: 100px; height: 100px;">
-              <div v-else>Manque le visuel</div>
-            </td>
-            <td>{{ recipe.title }}</td>
-            <td>{{ formatDate(recipe.created_at) }}</td>
-            <td>
-              <button @click="editRecipe(recipe)" class="btn btn-primary btn-sm">
-                <i class="bi bi-pencil-fill"></i>
-              </button>
-              <button @click="deleteRecipe(recipe.id)" class="btn btn-danger btn-sm">
-                <i class="bi bi-trash-fill"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <div v-if="isLoggedIn" class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Photo</th>
+                <th>Titre</th>
+                <th>Date de publication</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="recipe in recipes" :key="recipe.id">
+                <td>{{ recipe.id }}</td>
+                <td>
+                  <img v-if="recipe.picture" :src="recipe.picture" alt="Recipe Picture" class="img-thumbnail" style="width: 100px; height: 100px;">
+                  <div v-else>Manque le visuel</div>
+                </td>
+                <td>{{ recipe.title }}</td>
+                <td>{{ formatDate(recipe.created_at) }}</td>
+                <td>
+                  <button @click="editRecipe(recipe)" class="btn btn-primary btn-sm">
+                    <i class="bi bi-pencil-fill"></i>
+                  </button>
+                  <button @click="deleteRecipe(recipe.id)" class="btn btn-danger btn-sm">
+                    <i class="bi bi-trash-fill"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p v-if="recipes.length === 0">Aucune recette trouvée. Ajoutez votre première recette!</p>
+        <p v-else-if="!isLoggedIn">Vous devez être connecté pour voir vos recettes.</p>
+      </div>
     </div>
-    <p v-if="recipes.length === 0">Aucune recette trouvée. Ajoutez votre première recette!</p>
-    <p v-else-if="!isLoggedIn">Vous devez être connecté pour voir vos recettes.</p>
   </div>
 </template>
 
@@ -222,5 +226,20 @@ export default {
 </script>
 
 <style scoped>
+.bg-white {
+  background: rgba(255, 255, 255, 0.8) !important;
+}
 
+.shadow-lg {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+ 
+.attributs{
+    font-family: 'Lobster', cursive;
+    font-size: 3rem;
+}
+.form-container {
+  background: rgba(255, 255, 255, 0.9);
+}
 </style>

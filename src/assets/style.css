@@ -59,22 +59,12 @@ tfoot,
 thead,
 tr,
 th,
-td {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    font-size: 100%;
-    vertical-align: baseline;
-    background: transparent;
-}
 
 /* Styles Bootstrap */
 body {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
+    font-family: cursive, sans-serif;
     line-height: 1.6;
-    color: #e20b0b;
+    
 }
 
 .container {
@@ -82,6 +72,23 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
+}
+
+h1, h2 {
+    margin: 0 0 20px 0;
+    line-height: 1.2;
+    font-family: 'Lobster', cursive;
+}
+
+
+.btn-custom {
+    font-family: 'cursive'!important;
+    background-color: #6FA401 !important;
+}
+
+.btn-custom:hover {
+    font-family: 'cursive'!important;
+    background-color: #FFDE59 !important;
 }
 
 /* Ajoutez d'autres styles Bootstrap ici */

@@ -1,22 +1,23 @@
 <template>
-  <h1>Evenements </h1>
-
-  
-      <div class="container-lg">
+  <div class="background-container">
+    <div class="overlay">
+      <div class="container mt-5">
         <div class="row">
           <!-- Display posts fetched from the API -->
           <div v-for="post in APIData" :key="post.id" class="col-md-4">
             <div class="card m-2">
-  <div class="card-body">
-    <h5 class="card-title">{{ post.title }}</h5>
-    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-    <a href="#" class="btn btn-primary">Button</a>
-  </div>
-</div>
+              <div class="card-body">
+                <h5 class="card-title">{{ post.city }}</h5>
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text">{{ post.content }}</p>
+                <h5 class="card-title">{{ post.event_date }}</h5>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-  
+    </div>
+  </div>
 </template>
 
 <script>
@@ -43,3 +44,37 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.background-container {
+  background: url('@/assets/salad-cezar2.webp') no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  background-color: rgba(237, 255, 204, 0.8);
+
+  width: 100%;
+  padding: 50px 0;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.card-title {
+  font-family: 'Lobster', cursive;
+}
+
+h5 {
+  font-size: 1.5rem;
+}
+
+.container {
+  max-width: 1200px;
+}
+</style>

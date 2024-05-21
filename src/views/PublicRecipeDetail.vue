@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-8">
         <h1 class="display-4">{{ recipe.title }}</h1>
-        <img :src="getImageUrl(recipe.picture)" class="img-fluid img-thumbnail my-3" alt="Image de la recette" v-if="recipe.picture">
+        <img :src="getImageUrl(recipe.picture)" class="img-fluid img-thumbnail my-3" alt="Image de la recette">
         <p class="lead"><strong>Description:</strong> {{ recipe.desc }}</p>
         <p><strong>Temps de cuisson:</strong> {{ recipe.cook_time }} minutes</p>
       </div>
@@ -30,6 +30,7 @@
 
 <script>
 import getAPI from "@/axios-api";
+import defaultImage from "@/assets/few_rivolis.webp"; // Assurez-vous que le chemin est correct
 
 export default {
   props: {
@@ -59,7 +60,7 @@ export default {
         });
     },
     getImageUrl(path) {
-      if (!path) return '';
+      if (!path) return defaultImage;
       return `${process.env.VUE_APP_API_URL}${path}`;
     }
   }

@@ -19,7 +19,7 @@
             <router-link :to="{ name: 'PublicRecipesList' }" class="nav-link">Receipes</router-link>
           </li>
           <li class="nav-item">
-            <router-link :to="{ name: 'posts' }" class="nav-link">Posts</router-link>
+            <router-link :to="{ name: 'posts' }" class="nav-link">Événements</router-link>
           </li>
         </ul>
         <ul class="navbar-nav ms-auto"> <!-- Added ms-auto to align right -->
