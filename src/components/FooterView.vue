@@ -1,5 +1,5 @@
 <template>
-    <footer class="mt-4">
+    <footer>
       <ul class="nav justify-content-center border-bottom pb-3 mb-3">
         <li class="nav-item">
           <router-link to="/" class="nav-link px-2 text-muted">Accueil</router-link>
@@ -20,7 +20,7 @@
   
   <style scoped>
   footer {
-    background-color: #f8f9fa;
+    background-color: #FFDE59 !important;
     padding: 1rem 0;
     position: relative;
     width: 100%;

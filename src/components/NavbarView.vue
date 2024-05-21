@@ -60,7 +60,6 @@
   
   <style>
   nav {
-    font-family: 'Arial', sans-serif;
     font-size: 1rem !important;
     background-color: #FFDE59 !important;
 }
