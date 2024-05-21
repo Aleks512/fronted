@@ -6,7 +6,6 @@
   <button @click="forward">Forward</button> -->
 
   <router-view/>
-  <div class="oval"></div>
 </template>
 
 <script>

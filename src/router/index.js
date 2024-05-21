@@ -47,6 +47,11 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/legal-mentions',
+    name: 'LegalMentions',
+    component: () => import('@/views/LegalMentions.vue')
+  },
+  {
     path: "/about-us",
     redirect: { name: "about" },
   },
