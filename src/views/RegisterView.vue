@@ -140,8 +140,5 @@ export default {
 .shadow-lg {
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
 }
-.btn-custom {
-  font-family: 'cursive' !important;
-  background-color: #E60020 !important;
-}
+
 </style>

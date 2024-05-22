@@ -24,4 +24,13 @@ footer {
   padding: 1rem 0;
   width: 100%;
 }
+a:hover {
+  font-weight: bold;
+  color: #2c3e50;
+  text-decoration: none;
+  line-height: 1.5rem;
+  font-size-adjust: inherit;
+}
+
+
 </style>
