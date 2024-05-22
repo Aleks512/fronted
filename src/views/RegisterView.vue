@@ -95,7 +95,11 @@ export default {
           email: this.form.email,
           password: this.form.password,
           password2: this.form.password2
-        });gitror:", error);
+        });
+        console.log("Registration successful, redirecting to login...");
+        this.$router.push({ name: 'login' });
+      } catch (error) {
+        console.error("Registration failed with error:", error);
         if (error.response?.data) {
           if (error.response.data.email) {
             this.emailError = error.response.data.email.join(' ');
@@ -136,5 +140,8 @@ export default {
 .shadow-lg {
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
 }
-
+.btn-custom {
+  font-family: 'cursive' !important;
+  background-color: #E60020 !important;
+}
 </style>
