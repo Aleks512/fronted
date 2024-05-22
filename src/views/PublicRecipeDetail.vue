@@ -10,13 +10,13 @@
       <div class="col-md-4">
         <div class="card">
           <div class="card-body">
-            <h2 class="card-title">Catégorie</h2>
+            <h3 class="card-title">Catégorie</h3>
             <p class="card-text">{{ recipe.category_name }}</p>
-            <h2 class="card-title mt-4">Ingrédients</h2>
+            <h3 class="card-title mt-4">Ingrédients</h3>
             <ul class="list-group list-group-flush">
               <li v-for="(ingredient, index) in recipe.ingredients.split(',')" :key="index" class="list-group-item">{{ ingredient }}</li>
             </ul>
-            <h2 class="card-title mt-4">Auteur</h2>
+            <h3 class="card-title mt-4">Auteur</h3>
             <p class="card-text">{{ recipe.author_name }}</p>
           </div>
         </div>
