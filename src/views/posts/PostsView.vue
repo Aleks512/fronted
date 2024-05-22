@@ -7,8 +7,8 @@
           <div v-for="post in APIData" :key="post.id" class="col-md-4">
             <div class="card m-2">
               <div class="card-body">
-                <h5 class="card-title">{{ post.city }}</h5>
-                <h5 class="card-title">{{ post.title }}</h5>
+                <h3 class="card-title">{{ post.city }}</h3>
+                <h4 class="card-title">{{ post.title }}</h4>
                 <p class="card-text">{{ post.content }}</p>
                 <h5 class="card-title">{{ post.event_date }}</h5>
               </div>

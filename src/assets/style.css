@@ -61,34 +61,46 @@ tr,
 th,
 
 /* Styles Bootstrap */
+/* Global styles */
 body {
-    font-family: cursive, sans-serif;
-    line-height: 1.6;
-    
-}
-
-.container {
+    margin: 0;
+    padding: 0;
+    font-family: 'cursive 400';
+  }
+  
+  .container {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
-}
-
-h1, h2 {
+  }
+  
+  h1, h2 {
     margin: 0 0 20px 0;
     line-height: 1.2;
     font-family: 'Lobster', cursive;
-}
-
-
-.btn-custom {
-    font-family: 'cursive'!important;
+  }
+  h3 {
+    text-align: center;
+    font-size: 1.5rem !important;
+    font-family: 'Lobster'!important;
+    color: #E60020 !important;
+  }
+  
+  .btn-custom {
     background-color: #6FA401 !important;
-}
-
-.btn-custom:hover {
-    font-family: 'cursive'!important;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .btn-custom:hover {
     background-color: #FFDE59 !important;
-}
-
-/* Ajoutez d'autres styles Bootstrap ici */
+  }
+  
+  #app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  

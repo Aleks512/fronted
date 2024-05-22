@@ -54,7 +54,7 @@
       mounted() {
           // Code to run when the component is mounted goes here
       },
-      // Your component's lifecycle hooks go here
+      
   };
   </script>
   
