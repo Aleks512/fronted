@@ -95,11 +95,7 @@ export default {
           email: this.form.email,
           password: this.form.password,
           password2: this.form.password2
-        });
-        console.log("Registration successful, redirecting to login...");
-        this.$router.push({ name: 'login' });
-      } catch (error) {
-        console.error("Registration failed with error:", error);
+        });gitror:", error);
         if (error.response?.data) {
           if (error.response.data.email) {
             this.emailError = error.response.data.email.join(' ');
