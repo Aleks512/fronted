@@ -12,6 +12,9 @@
           <li class="nav-item">
             <router-link :to="{ name: 'home' }" class="nav-link">Accueil</router-link>
           </li>
+          <!-- <li class="nav-item">
+            <router-link :to="{ name: 'about' }" class="nav-link">About</router-link>
+          </li> -->
           <li class="nav-item">
             <router-link :to="{ name: 'PublicRecipesList' }" class="nav-link">Recettes</router-link>
           </li>
@@ -19,7 +22,7 @@
             <router-link :to="{ name: 'posts' }" class="nav-link">Événements</router-link>
           </li>
         </ul>
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto"> <!-- Added ms-auto to align right -->
           <li v-if="!isLoggedIn" class="nav-item">
             <router-link :to="{ name: 'login' }" class="nav-link">Se connecter</router-link>
           </li>
@@ -29,9 +32,8 @@
           <li v-if="isLoggedIn" class="nav-item">
             <router-link :to="{ name: 'private-recipes-list' }" class="nav-link">Mes recettes</router-link>
           </li>
-          <!-- Link for logout, calls the logout method on click -->
           <li v-if="isLoggedIn" class="nav-item">
-            <a @click.prevent="logout" class="nav-link" href="#">Logout</a>
+            <router-link :to="{ name: 'logout' }" class="nav-link">Logout</router-link>
           </li>
         </ul>
       </div>
@@ -39,29 +41,27 @@
   </nav>
 </template>
 
-<script>
-import { mapGetters, mapActions } from 'vuex';
-
-export default {
-  name: 'NavBar',
-  computed: {
-    ...mapGetters('auth', ['isLoggedIn']), // Map Vuex getter to check if the user is logged in
+  <script>
+  import { mapGetters, mapActions } from 'vuex';
+  export default {
+      name: 'NavBar',
+      computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
   },
   methods: {
-    ...mapActions('auth', ['logout']), // Map Vuex action to logout the user
-    async logout() {
-      // Call the logout action and then redirect to the login page
-      await this.logout();
-      this.$router.push({ name: 'login' });
-    },
+    ...mapActions('auth', ['logout']),
   },
-};
-</script>
-
-<style>
-nav {
-  font-size: 1rem !important;
-  background-color: #FFDE59 !important;
+      mounted() {
+          // Code to run when the component is mounted goes here
+      },
+      
+  };
+  </script>
+  
+  <style>
+  nav {
+    font-size: 1rem !important;
+    background-color: #FFDE59 !important;
 }
 a:hover {
   font-weight: bold;
@@ -70,4 +70,5 @@ a:hover {
   line-height: 1.5rem;
   font-size-adjust: inherit;
 }
-</style>
+  </style>
+  

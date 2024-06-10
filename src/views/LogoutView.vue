@@ -9,7 +9,7 @@
         // Directly call dispatch on the Vuex store
         this.$store.dispatch('auth/logout')
           .then(() => {
-            alert('You have been logged out.');
+            alert('Dommage, vous partez déjà.');
           })
           .catch(error => {
             console.error('Logout failed:', error);
