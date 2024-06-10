@@ -30,16 +30,13 @@ const routes = [
     name: "register",
     component: () => import("@/views/RegisterView.vue"),
   },
+  
   {
     path: "/login",
     name: "login",
     component: () => import("@/views/LoginView.vue"),
   },
-  {
-    path: "/logout",
-    name: "logout",
-    component: () => import("@/views/LogoutView.vue"),
-  },
+
   {
     path: "/my-recipes",
     name: "private-recipes-list",
