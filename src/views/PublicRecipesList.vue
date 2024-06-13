@@ -1,36 +1,23 @@
 <template>
   <div class="container-fluid p-5" style="position: relative;">
-    <div class="row" >
-      <!-- <div class="col-md-2" >
-
-      </div> -->
-            <!-- <div class="col-md-3">
-        <h2>Catégories</h2>
-        <ul class="list-group">
-          <li class="list-group-item" v-for="category in categories" :key="category.id">{{ category.name }}</li>
-        </ul>
-      </div> -->
-      
-        
-          <div class="col-md-4 mx-auto" v-for="recipe in recipes" :key="recipe.id">
-            <div class="card mb-3" style="cursor:pointer;" @click="viewRecipe(recipe.id)">
-              <img :src="getImageUrl(recipe.picture)" class="card-img-top" alt="Image de la recette" v-if="recipe.picture">
-              <div class="card-body">
-                <h5 class="card-title">{{ recipe.title }}</h5>
-                <p class="card-text">{{ recipe.desc }}</p>
-                <p class="card-text"><small class="text-muted">Temps de cuisson: {{ recipe.cook_time }} minutes</small></p>
-              </div>
-            </div>
+    <div class="row">
+      <div class="col-md-4 mx-auto" v-for="recipe in recipes" :key="recipe.id">
+        <div class="card mb-3" style="cursor:pointer;" @click="viewRecipe(recipe.id)">
+          <img :src="getImageUrl(recipe.picture)" class="card-img-top" alt="Image de la recette">
+          <div class="card-body">
+            <h5 class="card-title">{{ recipe.title }}</h5>
+            <p class="card-text">{{ recipe.desc }}</p>
+            <p class="card-text"><small class="text-muted">Temps de cuisson: {{ recipe.cook_time }} minutes</small></p>
           </div>
         </div>
-   
+      </div>
+    </div>
   </div>
 </template>
 
-
-
 <script>
 import getAPI from "@/axios-api";
+import defaultImage from "@/assets/few_rivolis.webp"; // Assurez-vous que le chemin est correct
 
 export default {
   name: 'PublicRecipesList',
@@ -64,7 +51,12 @@ export default {
         });
     },
     getImageUrl(path) {
-      if (!path) return '';
+      if (!path) return defaultImage;
+      // Check if the path is already an absolute URL
+      if (path.startsWith('http://') || path.startsWith('https://')) {
+        return path;
+      }
+      // Otherwise, prefix with the base API URL
       return `${process.env.VUE_APP_API_URL}${path}`;
     },
     viewRecipe(id) {
@@ -74,27 +66,23 @@ export default {
 }
 </script>
 
-
 <style scoped>
-
 .card-title, h5 {
-    font-family: 'Bad Script', cursive !important;
-    font-size: 2rem;
-    font-weight: bold;
-    color:#6FA401;
-
+  font-family: 'Bad Script', cursive !important;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #6FA401;
 }
-.card-text, p{
-    font-family: 'Reddit Sans', cursive !important;
-    font: 2em !important;
+.card-text, p {
+  font-family: 'Reddit Sans', cursive !important;
+  font: 2em !important;
 }
-.card .card-body{
-  background-color:#EDFFCC !important;
+.card .card-body {
+  background-color: #EDFFCC !important;
 }
-
 .card-img-top {
-  width: 100%; /* ensures the image covers the card width */
-  height: 18.75rem; /* REM-based height for consistency */
-  object-fit: cover; /* ensures the image covers the space without distortion */
+  width: 100%;
+  height: 18.75rem;
+  object-fit: cover;
 }
 </style>
