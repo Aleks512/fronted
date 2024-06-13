@@ -4,15 +4,15 @@
   
       <h2>Identification de l'éditeur et de l'hébergeur du site</h2>
       <p><strong>Nom du site :</strong> Vegie Bloggers</p>
-      <p><strong>URL du site :</strong> <a href="http://www.vegiebloggers.com">www.vegiebloggers.com</a></p>
-      <p><strong>Propriétaire et Administrateur du site :</strong> John Doe</p>
-      <p><strong>Adresse :</strong> 123 Rue des Plantes, 75000 Paris, France</p>
-      <p><strong>Email :</strong> contact@vegiebloggers.com</p>
+      <p><strong>URL du site :</strong> <a href="https://aleks-veggie-bloggers.onrender.com/">www.vegiebloggers.com</a></p>
+      <p><strong>Propriétaire et Administrateur du site :</strong> John et Aleks Doe</p>
+      <p><strong>Adresse :</strong> 123 Rue Milky Way 75000 Paris, France</p>
+      <p><strong>Email :</strong> ventalis1602@gmail.com</p>
   
       <p><strong>Hébergeur :</strong></p>
-      <p>OVH SAS</p>
-      <p>2 Rue Kellermann, 59100 Roubaix, France</p>
-      <p>Email : support@ovh.com</p>
+      <p>Render</p>
+      <p>Digital Ocean</p>
+     
   
       <h2>Objet du site</h2>
       <p>
