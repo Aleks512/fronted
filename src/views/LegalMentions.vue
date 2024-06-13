@@ -13,7 +13,6 @@
       <p><strong>Hébergeur :</strong></p>
       <p>Render</p>
       <p>Digital Ocean</p>
-     
   
       <h2>Objet du site</h2>
       <p>
