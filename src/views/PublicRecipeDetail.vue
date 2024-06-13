@@ -61,6 +61,11 @@ export default {
     },
     getImageUrl(path) {
       if (!path) return defaultImage;
+      // Check if the path is already an absolute URL
+      if (path.startsWith('http://') || path.startsWith('https://')) {
+        return path;
+      }
+      // Otherwise, prefix with the base API URL
       return `${process.env.VUE_APP_API_URL}${path}`;
     }
   }
@@ -68,8 +73,7 @@ export default {
 </script>
 
 <style scoped>
-h1,
-h2 {
+h1, h2 {
   color: #2c3e50;
 }
 
