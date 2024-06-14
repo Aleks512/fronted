@@ -49,7 +49,7 @@ export default {
         this.$router.push({ name: 'private-recipes-list' }); // Assurez-vous que le nom de la route est correct.
       }).catch(error => {
         console.error("Login failed:", error);
-        alert('Failed to login: ' + error.message);
+        
       });
     }
   }
