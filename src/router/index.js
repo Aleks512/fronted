@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { store } from "../store"; // Assurez-vous que le chemin est correct
+import { store } from "../store"; 
 import PublicRecipeDetail from "@/views/PublicRecipeDetail.vue";
 const routes = [
   {
