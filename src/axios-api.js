@@ -54,6 +54,7 @@ getAPI.interceptors.request.use(async function (config) {
           console.error('Error refreshing token:', error); // Log pour débogage
           isRefreshing = false;
           processQueue(error);
+          store.dispatch('auth/logout');
         });
       }
 
