@@ -25,12 +25,14 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
-// Routine to refresh token every 25 minutes
 const refreshTokenRoutine = () => {
   const refreshTokenInterval = 25 * 60 * 1000; // 25 minutes
   setInterval(async () => {
     const refreshToken = sessionStorage.getItem('refreshToken');
-    if (refreshToken) {
+    const refreshTokenExpiresAt = parseInt(sessionStorage.getItem('refreshTokenExpiresAt'), 10);
+    const now = Date.now();
+
+    if (refreshToken && now < refreshTokenExpiresAt) {
       try {
         const response = await store.dispatch('auth/refreshToken');
         console.log('Token refreshed successfully in routine:', response);
@@ -39,6 +41,10 @@ const refreshTokenRoutine = () => {
         store.dispatch('auth/logout');
         router.push({ name: 'login' });
       }
+    } else {
+      console.error('Refresh token expired or not available in routine');
+      store.dispatch('auth/logout');
+      router.push({ name: 'login' });
     }
   }, refreshTokenInterval);
 };
