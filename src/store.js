@@ -101,7 +101,6 @@ const auth = {
 };
 
 // Création du store
-
 export const store = createStore({
   modules: {
     auth: auth,

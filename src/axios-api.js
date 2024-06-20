@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { store } from './store';
+import router from '@/router';
 
 const getAPI = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -24,20 +25,34 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
+// Routine to refresh token every 25 minutes
+const refreshTokenRoutine = () => {
+  const refreshTokenInterval = 25 * 60 * 1000; // 25 minutes
+  setInterval(async () => {
+    const refreshToken = sessionStorage.getItem('refreshToken');
+    if (refreshToken) {
+      try {
+        const response = await store.dispatch('auth/refreshToken');
+        console.log('Token refreshed successfully in routine:', response);
+      } catch (error) {
+        console.error('Error refreshing token in routine:', error);
+        store.dispatch('auth/logout');
+        router.push({ name: 'login' });
+      }
+    }
+  }, refreshTokenInterval);
+};
+
+refreshTokenRoutine();
+
 getAPI.interceptors.request.use(async function (config) {
   const token = sessionStorage.getItem('accessToken');
   const accessTokenExpiresAt = parseInt(sessionStorage.getItem('accessTokenExpiresAt'), 10);
   const now = Date.now();
 
-  // Define public endpoints
-  const publicEndpoints = ['/api/recipes/', '/api/categories/', '/register/', '/login/', '/posts/'];
-
-  // Check if the request is to a public endpoint
-  const isPublicEndpoint = publicEndpoints.some(endpoint => config.url.includes(endpoint));
-
   console.log('Request Interceptor: Checking token expiry and refreshing if necessary');
 
-  if (!isPublicEndpoint && token) {
+  if (token) {
     console.log(`Token expires at: ${new Date(accessTokenExpiresAt)}`);
     console.log(`Current time: ${new Date(now)}`);
 
@@ -46,22 +61,24 @@ getAPI.interceptors.request.use(async function (config) {
 
       if (!isRefreshing) {
         isRefreshing = true;
-        store.dispatch('auth/refreshToken').then(newToken => {
-          console.log('Token refreshed successfully:', newToken); // Log pour débogage
+        try {
+          const newToken = await store.dispatch('auth/refreshToken');
+          console.log('Token refreshed successfully:', newToken);
           isRefreshing = false;
           processQueue(null, newToken);
-        }).catch(error => {
-          console.error('Error refreshing token:', error); // Log pour débogage
+        } catch (error) {
+          console.error('Error refreshing token:', error);
           isRefreshing = false;
           processQueue(error);
-          store.dispatch('auth/logout');
-        });
+          await store.dispatch('auth/logout');
+          router.push({ name: 'login' });
+        }
       }
 
       return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
-      }).then(token => {
-        config.headers['Authorization'] = 'Bearer ' + token;
+      }).then(newToken => {
+        config.headers['Authorization'] = 'Bearer ' + newToken;
         return config;
       }).catch(error => {
         return Promise.reject(error);
@@ -73,6 +90,26 @@ getAPI.interceptors.request.use(async function (config) {
 
   return config;
 }, function (error) {
+  return Promise.reject(error);
+});
+
+getAPI.interceptors.response.use(response => {
+  return response;
+}, async function (error) {
+  const originalRequest = error.config;
+  if (error.response.status === 401 && !originalRequest._retry) {
+    originalRequest._retry = true;
+    try {
+      const newToken = await store.dispatch('auth/refreshToken');
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + newToken;
+      originalRequest.headers['Authorization'] = 'Bearer ' + newToken;
+      return axios(originalRequest);
+    } catch (e) {
+      await store.dispatch('auth/logout');
+      router.push({ name: 'login' });
+      return Promise.reject(e);
+    }
+  }
   return Promise.reject(error);
 });
 
