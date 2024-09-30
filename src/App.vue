@@ -41,6 +41,8 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Bad+Script&family=Open+Sans:wght@400;700&display=swap');

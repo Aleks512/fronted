@@ -1,79 +1,82 @@
 <template>
-  <div class="container-fluid position-relative mt-5 p-0">
-    <div class="row no-gutters">
-      <div class="col-12">
-        <img :src="logo" class="img-fluid w-100" alt="Logo Kitchen" style="height: 100vh; object-fit: cover;">
-        <div class="position-absolute top-50 start-50 translate-middle w-100">
-          <div class="col-md-6 offset-md-3 bg-white p-5 rounded shadow-lg">
-            <p v-if="incorrectAuth" class="text-danger">Incorrect email or password entered - please try again</p>
-            <form @submit.prevent="login" class="form">
-              <div class="form-group mb-3">
-                <label for="email">Email</label>
-                <input v-model="email" type="email" class="form-control" id="email" placeholder="Enter email" required>
-              </div>
-              <div class="form-group mb-3">
-                <label for="password">Password</label>
-                <input v-model="password" type="password" class="form-control" id="password" placeholder="Enter password" required>
-              </div>
-              <button type="submit" class="btn btn-custom w-100">Login</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="container mt-5">
+    <h1 class="mb-4">Mentions Légales</h1>
+
+    <h2>Identification de l'éditeur et de l'hébergeur du site</h2>
+    <p><strong>Nom du site :</strong> Vegie Bloggers</p>
+    <p><strong>URL du site :</strong> <a href="https://aleks-veggie-bloggers.onrender.com/">https://aleks-veggie-bloggers.onrender.com/</a></p>
+    <p><strong>Propriétaire et Administrateur du site :</strong> John Doe</p>
+
+
+
+
+    <h2>Objet du site</h2>
+    <p>
+      Le site Vegie Bloggers a pour objectif de fournir des recettes végétariennes saines et écoresponsables, offrant ainsi une alternative aux sites de recettes traditionnelles. Les utilisateurs peuvent créer un compte, publier leurs propres recettes et explorer celles des autres membres de la communauté.
+    </p>
+
+    <h2>Inscription et gestion des comptes utilisateurs</h2>
+
+    <h3>Données collectées</h3>
+    <p>
+      Lors de la création d’un compte sur Vegie Bloggers, les informations suivantes sont collectées :
+    </p>
+    <ul>
+      <p>Nom</p>
+      <p>Adresse email</p>
+    </ul>
+    <p>Ces informations sont nécessaires pour permettre à l'utilisateur de se connecter à son compte.</p>
+
+    <h3>Administration des comptes</h3>
+    <p>
+      Le propriétaire et administrateur du site se réserve le droit de désactiver les comptes utilisateurs dans les cas suivants :
+    </p>
+    <ul>
+      <p>L'utilisateur pose un problème au sein de la communauté (comportement inapproprié, contenu inapproprié, etc.)</p>
+      <p>L'utilisateur n'a pas publié de recette depuis plus de 1 an</p>
+    </ul>
+
+    <h2>Politique de confidentialité</h2>
+    <p>
+      Vegie Bloggers s'engage à respecter la confidentialité des données personnelles des utilisateurs. Les données collectées (nom et adresse email) sont utilisées uniquement pour la gestion des comptes utilisateurs et ne sont pas partagées avec des tiers.
+    </p>
+
+    <h3>Utilisation des cookies</h3>
+    <p>
+      Le site Vegie Bloggers n'utilise pas de cookies tiers. Les cookies utilisés sont uniquement destinés à améliorer l'expérience utilisateur sur le site.
+    </p>
+
+    <h2>Propriété intellectuelle</h2>
+    <p>
+      Tous les contenus (textes, images, recettes) publiés sur le site Vegie Bloggers sont protégés par les lois en vigueur sur la propriété intellectuelle. Les utilisateurs conservent la propriété des recettes qu'ils publient, mais accordent à Vegie Bloggers un droit de diffusion.
+    </p>
+
+    <h2>Responsabilité</h2>
+    <p>
+      Le propriétaire du site Vegie Bloggers ne saurait être tenu responsable des dommages directs ou indirects pouvant résulter de l'accès ou de l'utilisation du site, y compris l’inaccessibilité, les pertes de données, et/ou la présence de virus sur le site, sans que cette liste soit exhaustive.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Pour toute question ou réclamation concernant le site Vegie Bloggers, vous pouvez nous contacter à l'adresse email suivante : contact@vegiebloggers.com
+    </p>
+
+    <p><strong>Dernière mise à jour :</strong> 20 Mai 2024</p>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-      logo: require('@/assets/pages/vegetarian_meal.webp') 
-    };
-  },
-  computed: {
-    incorrectAuth() {
-      return this.$store.getters['auth/authError'];
-    }
-  },
-  methods: {
-    login() {
-      this.$store.dispatch('auth/login', {
-        email: this.email,
-        password: this.password
-      }).then(() => {
-        this.$router.push({ name: 'private-recipes-list' });
-      }).catch(error => {
-        console.error("Login failed:", error);
-        alert('Failed to login: ' + error.message);
-      });
-    }
-  }
+  name: 'LegalMentions'
 }
 </script>
 
 <style scoped>
-/* Ajoutez ici des styles spécifiques à ce composant */
-.container-fluid {
-  padding: 0;
-  margin: 0;
+h1, h2, h3 {
+  color: #2c3e50;
 }
-
-.no-gutters {
-  margin: 0;
-}
-
-.img-fluid {
-  filter: brightness(50%);
-}
-
-.bg-white {
-  background: rgba(255, 255, 255, 0.8) !important;
-}
-
-.shadow-lg {
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+.container {
+  margin-top: 30px;
+  line-height: 1.6;
 }
 </style>
