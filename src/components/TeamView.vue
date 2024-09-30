@@ -39,13 +39,13 @@
           },
           {
             id: 4,
-            name: "Kris Dupont",
+            name: "Kris Kowalski",
             role: "Developpeur web",
             photo: "h_middleE_decontracté.webp"
           },
           {
             id: 5,
-            name: "Laura Dupont",
+            name: "Anatasia Austin",
             role: "Infirmière libérale",
             photo: "F_white_smile.webp"
           },
