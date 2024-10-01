@@ -10,22 +10,22 @@
       <div class="carousel-item active">
         <img src="@/assets/vegetarian_chili.webp" class="d-block w-100" alt="First slide">
         <div class="carousel-caption d-none d-md-block">
-          <h5>First slide label</h5>
-          <p>Some representative placeholder content for the first slide.</p>
+          <h5>Syper Chili Spicy</h5>
+          <p>Le chili végétarien est un plat épicé à base de légumes, de haricots et d'épices, sans viande, offrant une alternative savoureuse au chili traditionnel</p>
         </div>
       </div>
       <div class="carousel-item">
         <img src="@/assets/few_rivolis.webp" class="d-block w-100" alt="Second slide">
         <div class="carousel-caption d-none d-md-block">
-          <h5>Second slide label</h5>
-          <p>Some representative placeholder content for the second slide.</p>
+          <h5>Ravioli Végétarien</h5>
+          <p>Le ravioli végétarien est une option saine et équilibrée, riche en fibres et nutriments, grâce à sa farce de légumes et légumineuses, sans les graisses saturées de la viande</p>
         </div>
       </div>
       <div class="carousel-item">
         <img src="@/assets/salad-cezar2.webp" class="d-block w-100" alt="Third slide">
         <div class="carousel-caption d-none d-md-block">
-          <h5>Third slide label</h5>
-          <p>Some representative placeholder content for the third slide.</p>
+          <h5>Salade Composée</h5>
+          <p>La salade composée est un plat frais et nutritif, combinant légumes riches en vitamines, protéines maigres, et bonnes graisses, offrant un repas complet et bénéfique pour la santé.</p>
         </div>
       </div>
     </div>
